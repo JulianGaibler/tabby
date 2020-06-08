@@ -11,8 +11,6 @@ const loadedLanguages = ['en']
 let currentLanguage = 'system'
 let actualLanguage = 'en'
 
-console.log(defaultLanguage)
-
 export const i18n = new VueI18n({
   locale: 'en',
   fallbackLocale: 'en',
@@ -56,7 +54,7 @@ export function _setLanguage(lang, updateStorage = true) {
   // If the language hasn't been loaded yet
   return import(/* webpackChunkName: "lang-[request]" */ `@/locales/${actualLanguage}.yaml`).then(
     resource => {
-      i18n.setLocaleMessage(lang, resource.default)
+      i18n.setLocaleMessage(actualLanguage, resource.default)
       loadedLanguages.push(actualLanguage)
       return _updateBundle(actualLanguage)
     },
