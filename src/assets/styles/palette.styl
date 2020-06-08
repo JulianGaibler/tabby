@@ -1,0 +1,58 @@
+$light = {
+    font-color: #595959
+    font-color-contrast: #000000
+    font-color-light: #9C9C9C
+    background: #FFFFFF
+    background-odd: #F3F3F3
+    background-selected: #F6F6F6
+    seperator-color: #E6E6E6
+    light-background: transparent
+    input-color: #595959
+    brand-color: #E9564F
+
+    image-cat-noresults: url('~@/assets/cat_noresults.svg')
+    image-cat-search: url('~@/assets/cat_search.svg')
+}
+
+$dark = {
+    font-color: #9DA5B4
+    font-color-contrast: #C6CEDD
+    font-color-light: #8B94A6
+    background: #282C34
+    background-odd: #21252B
+    background-selected: #3A3F4B
+    seperator-color: #21252B
+    light-background: #616673
+    input-color: #C6CEDD
+    brand-color: #E9564F
+
+    image-cat-noresults: url('~@/assets/cat_noresults_dark.svg')
+    image-cat-search: url('~@/assets/cat_search_dark.svg')
+}
+
+:root {
+  varinject($light)
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    varinject($dark)
+  }
+}
+
+:root[data-theme^="light"]
+    varinject($light)
+
+:root[data-theme^="dark"]
+    varinject($dark)
+
+themed(n, varname, args...)
+    var = $light[varname]
+    {n} args var;
+    {n} args 'var(--%s, %s)' % (varname var);
+
+varinject($obj)
+    $ddash = \-+\-
+    for val in $obj
+        $key = $ddash+val
+        {$key} $obj[val]

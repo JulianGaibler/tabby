@@ -1,0 +1,81 @@
+# English translation for tabby
+# Fields marked with (catpun) can have a subtle cat-based but if paw-sible. Don't force it though!
+
+# This is for the main search input.
+# placeholder: (catpun) Grey text that appears when the input is empty.
+# aria-label: label for screen readers
+search-input:
+  placeholder: Tabs suchen...
+  aria-label: Tabs suchen
+
+# (catpun) Text that appears if there are no search results
+search-no-result: keine Tabs gefunden
+
+# Onboarding text
+onboarding-headline: Danke, dass du tabby benutzt!
+onboarding-instructions: Tipp' irgendetwas in das Textfeld ein, um im aktuellen Fenster nach Tabs zu suchen.
+onboarding-about-settings: Außerdem kannst du für weitere Einstellungen auf das tabby Icon klicken!
+
+# Navigation buttons
+preferences-button: Einstellungen
+back-button: Zurück
+
+# Links to source code
+source-code: Quellcode
+
+# (catpun) Headline of preferences-page
+preferences-header: Einstellungen
+
+
+# Shortcut settings (shortcut is not changeable from within the extension)
+preferences-shortcut-headline: Öffnen mit Tastenkombination
+# url will be inserted into message where {0} is.
+# url is a link to an external documentation (see url-changing-shortcuts-*)
+preferences-shortcut-explanation:
+  message: Du kannst die Tastenkombination {0} ändern.
+  url: in deinen Browsereinstellungen
+
+# Language Settings
+preferences-language-headline: Sprache
+# url will be inserted into message where {0} is.
+# url is a link to the git repository
+preferences-language-contribute:
+  message: '{0} von tabby.'
+  url: Hilf bei der Übersetzung
+
+# Theme Settings
+preferences-theme-headline: Designs
+preferences-theme-explanation: "'Auto' wählt das Erscheinungsbild automatisch aus."
+
+# Theme Settings
+preferences-icon-headline: Icon
+preferences-icon-explanation: Legt das Symbol für den Browser-Button fest.
+
+# Asking for Recommendation
+preferences-recommend-headline: Gefällt dir tabby?
+preferences-recommend-review: Teile es mit deinen Freunden oder schreibe ein Review.
+# url will be inserted into message where {0} is.
+# url is a link to a twitter account
+preferences-recommend-feedback:
+  message: 'Du kannst mir auch {0}.'
+  url: auf Twitter Feedback geben
+
+# Languages
+# Remove all languages except the one being translated and system, so it can fall back to english.
+language-system: System
+language-name-de: German
+
+# Themes
+theme-system: Auto
+theme-light: Hell
+theme-dark: Dunkel
+
+# Icons
+icon-default: Auge (Standard)
+icon-eye-themed: Auge (Farbe)
+icon-face: Gesicht
+icon-face-themed: Gesicht (Farbe)
+
+# Link to localized documentation on how to change extension shortcuts.
+# Comment out if there is no localized version, so it can fall back to english.
+url-changing-shortcuts-firefox: https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten
