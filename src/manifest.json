@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "tabby",
   "version": "1.0",
-  "description": "TODO",
+  "description": "Browser extension for fast tab-switching",
 
   "browser_specific_settings": {
     "gecko": {
