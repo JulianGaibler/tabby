@@ -8,14 +8,17 @@ tabby is a browser extension to help you switch between tabs in a breeze.
 
 Since this is an extension that uses privileged browser APIs a lot of features won't work in dev-mode.
 
+To install dependencies, run and build tabby, you need node and npm. When you have done this, you can navigate into the directory and install the dependencies.
+
 ``` bash
-# Install dependencies
+cd path/to/tabby
 npm install
-# Run dev-server
-npm run dev
-# Build extension
-npm run build
 ```
+
+You can run the extension in your browser as a website by calling `npm run dev`.
+
+If you want to build to extension you can run `npm run dev`.
+After that, the unpacked extension will be in the `dist/` directory, ready to be tested in your browser.
 
 ## Contribution and Commits
 
