@@ -19,7 +19,7 @@ npm run build
 
 ## Contribution and Commits
 
-If you want to help with translating tabby into more languages, copy the English language file and submit a pull-request. You can also [reach out](https://twitter.com/JulianWels) if you have trouble with that.
+If you want to help with translating tabby into more languages, copy the [English language file](/JulianWels/tabby/blob/master/src/locales/en.yaml) and submit a pull-request. You can also [reach out](https://twitter.com/JulianWels) if you have trouble with that.
 
 Contributions such as pull requests, reporting bugs and suggesting enhancements are always welcome!
 

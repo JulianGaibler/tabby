@@ -28,7 +28,7 @@
         <label for="input-language">
           <h2>{{ $t('preferences-language-headline') }}</h2>
           <i18n path="preferences-language-contribute.message" tag="p">
-            <a href="#" rel="noopener" target="_blank">{{ $t('preferences-language-contribute.url') }}</a>
+            <a href="https://github.com/JulianWels/tabby#contribution-and-commits" rel="noopener" target="_blank">{{ $t('preferences-language-contribute.url') }}</a>
           </i18n>
         </label>
         <div>
@@ -94,7 +94,7 @@
     <hr>
     <footer class="bottom-bar">
       <div>tabby {{clientVersion}}</div>
-      <div><a href="https://github.com/JulianWels/archive" rel="noopener" target="_blank">{{ $t('source-code') }}</a> // © 2020 Julian Wels</div>
+      <div><a href="https://github.com/JulianWels/tabby" rel="noopener" target="_blank">{{ $t('source-code') }}</a> // © 2020 Julian Wels</div>
     </footer>
   </div>
 </template>
