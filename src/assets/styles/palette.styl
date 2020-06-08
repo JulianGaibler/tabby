@@ -30,6 +30,12 @@ $dark = {
     image-cat-search: url('~@/assets/cat_search_dark.svg')
 }
 
+varinject($obj)
+    $ddash = \-+\-
+    for val in $obj
+        $key = $ddash+val
+        {$key} $obj[val]
+
 :root {
   varinject($light)
 }
@@ -50,9 +56,3 @@ themed(n, varname, args...)
     var = $light[varname]
     {n} args var;
     {n} args 'var(--%s, %s)' % (varname var);
-
-varinject($obj)
-    $ddash = \-+\-
-    for val in $obj
-        $key = $ddash+val
-        {$key} $obj[val]
