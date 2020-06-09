@@ -54,6 +54,12 @@ export default {
     .content
       flex 1
       overflow-y auto
+      &::-webkit-scrollbar
+          width .5em
+          height .5em
+      &::-webkit-scrollbar-thumb
+        themed background-color scroll-bar
+        border-radius 2rem
   hr
     margin 0
     border 0
