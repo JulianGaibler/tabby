@@ -14,7 +14,7 @@ search-no-result: keine Tabs gefunden
 # Onboarding text
 onboarding-headline: Danke, dass du tabby benutzt!
 onboarding-instructions: Tipp' irgendetwas in das Textfeld ein, um im aktuellen Fenster nach Tabs zu suchen.
-onboarding-about-settings: Außerdem kannst du für weitere Einstellungen auf das tabby Icon klicken!
+onboarding-about-settings: Außerdem kannst du für weitere Einstellungen auf das tabby Icon neben dem Suchfeld klicken!
 
 # Navigation buttons
 preferences-button: Einstellungen
