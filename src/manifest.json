@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "tabby",
-  "version": "1.0",
+  "version": "0.0.0",
   "description": "Browser extension for fast tab-switching",
 
   "browser_specific_settings": {
