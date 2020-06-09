@@ -59,6 +59,7 @@ const query = window.matchMedia('(prefers-color-scheme: dark)')
 
 query.addListener(change)
 thisBrowser.storage.onChanged.addListener(change)
+change()
 
 async function change() {
   const darkMode = query.matches ? 'dark' : 'light'
