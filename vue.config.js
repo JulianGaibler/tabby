@@ -1,4 +1,5 @@
 const CopyPlugin = require('copy-webpack-plugin')
+const yaml = require('yaml')
 
 module.exports = {
   lintOnSave: false,
@@ -25,6 +26,17 @@ module.exports = {
               const manifest = JSON.parse(content)
               manifest.version = pkg.version
               return JSON.stringify(manifest)
+            },
+          }, {
+            from: 'src/locales/*',
+            to: './_locales/[name]/messages.json',
+            transform(content) {
+              const langFile = yaml.parse(content.toString())
+              const manifestFile = {}
+              Object.keys(langFile.manifest).forEach(key =>
+                manifestFile[key] = { message: langFile.manifest[key] },
+              )
+              return JSON.stringify(manifestFile)
             },
           },
         ],

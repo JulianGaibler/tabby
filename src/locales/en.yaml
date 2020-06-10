@@ -81,3 +81,13 @@ icon-face-themed: Face (color)
 # Comment out if there is no localized version, so it can fall back to english.
 url-changing-shortcuts-firefox: https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox
 url-changing-shortcuts-chrome: https://jwels.berlin/chrome-shortcuts/
+
+
+# These translations are for the manifest.json file
+manifest:
+  # Name of the extension
+  name: tabby - fast tab switching
+  # Short description of the extension
+  description: Extension to search for and switch between tabs in seconds with a simple shortcut
+  # Description of shortcut to open tabby
+  shortcutOpen: Opens tabby
