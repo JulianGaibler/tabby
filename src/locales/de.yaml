@@ -79,3 +79,13 @@ icon-face-themed: Gesicht (Farbe)
 # Link to localized documentation on how to change extension shortcuts.
 # Comment out if there is no localized version, so it can fall back to english.
 url-changing-shortcuts-firefox: https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten
+
+
+# These translations are for the manifest.json file
+manifest:
+  # Name of the extension
+  name: tabby - schnelles tab wechseln
+  # Short description of the extension
+  description: Erweiterung zum Suchen und Wechseln zwischen Tabs in Sekundenschnelle mit einer einfachen Tastenkombination
+  # Description of shortcut to open tabby
+  shortcutOpen: Öffnet tabby
