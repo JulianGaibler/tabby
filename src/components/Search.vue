@@ -119,6 +119,9 @@ export default {
       }
     },
     focusTab(index, byClick=false) {
+      if (index < 0 || index >= this.results.length) {
+        return
+      }
       this.highlighted = index
       if (!byClick) {
         this.$refs.items[index].$el.scrollIntoView({
