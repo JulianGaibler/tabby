@@ -5,7 +5,7 @@ import { storageGet, storageSet, storageRemove } from '@/extensionApi'
 
 Vue.use(VueI18n)
 
-const supportedLanguages = ['en', 'de']
+const supportedLanguages = ['en', 'de', 'pt']
 
 const loadedLanguages = ['en']
 let currentLanguage = 'system'
@@ -17,7 +17,7 @@ export const i18n = new VueI18n({
   messages: { en: defaultLanguage },
 })
 
-function _updateBundle (lang) {
+function _updateBundle(lang) {
   document.querySelector('html').setAttribute('lang', lang)
   i18n.locale = lang
   return lang
@@ -31,7 +31,7 @@ export function _setLanguage(lang, updateStorage = true) {
 
   if (!lang || lang === 'system') {
     currentLanguage = 'system'
-    actualLanguage = /[^-]*/.exec(navigator.language )[0]
+    actualLanguage = /[^-]*/.exec(navigator.language)[0]
     if (updateStorage) {
       storageRemove('language')
     }
