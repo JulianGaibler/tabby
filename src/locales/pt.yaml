@@ -63,8 +63,7 @@ preferences-recommend-feedback:
 # Languages
 # Remove all languages except the one being translated and system, so it can fall back to english.
 language-system: Sistema
-language-name-en: Inglês
-language-name-de: Alemão
+language-name-pt: Português
 
 # Themes
 theme-system: Automático
@@ -79,8 +78,8 @@ icon-face-themed: Face (color)
 
 # Link to localized documentation on how to change extension shortcuts.
 # Comment out if there is no localized version, so it can fall back to english.
-url-changing-shortcuts-firefox: https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox
-url-changing-shortcuts-chrome: https://juliana.me/chrome-shortcuts/
+url-changing-shortcuts-firefox: https://support.mozilla.org/pt-PT/kb/gerir-os-atalhos-de-extensao-no-firefox
+# url-changing-shortcuts-chrome
 
 
 # These translations are for the manifest.json file
