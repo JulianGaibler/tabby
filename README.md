@@ -17,12 +17,26 @@ npm install
 
 You can run the extension in your browser as a website by calling `npm run dev`.
 
-If you want to build to extension you can run `npm run build`.
+If you want to build the extension you can run `npm run build`.
 After that, the unpacked extension will be in the `dist/` directory, ready to be tested in your browser.
 
 ## Contribution and Commits
 
-If you want to help with translating tabby into more languages, copy the [English language file](/JulianWels/tabby/blob/master/src/locales/en.yaml) and submit a pull-request. You can also [reach out](https://twitter.com/JulianWels) if you have trouble with that.
+### Language contributions
+
+If you want to help with translating tabby into more languages, follow these steps:
+1. Clone the repository
+2. Copy the [English language file](https://github.com/JulianWels/tabby/blob/master/src/locales/en.yaml).
+3. Rename the file to match the locale you are translating to (mind the note below).
+4. Translate the strings (If they don't start with a letter you have to wrap them in `"` quotes).
+5. Add the name of the language (in english) to the [English language file](/JulianWels/tabby/blob/master/src/locales/en.yaml).
+6. Make a pull request
+
+You can also [reach out](https://twitter.com/JulianWels) if you have trouble with that or questions.
+
+**Note:** The Chrome Web Store has a list of accepted [locale strings](https://developer.chrome.com/webstore/i18n#localeTable). If the language you translated to matches one of these, please use the corresponding locale code.
+
+### Code contributions
 
 Contributions such as pull requests, reporting bugs and suggesting enhancements are always welcome!
 

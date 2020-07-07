@@ -63,7 +63,7 @@ preferences-recommend-feedback:
 # Languages
 # Remove all languages except the one being translated and system, so it can fall back to english.
 language-system: Sistema
-language-name-pt: Português
+language-name-pt_PT: Português (Portugal)
 
 # Themes
 theme-system: Automático

@@ -5,8 +5,6 @@ import { storageGet, storageSet, storageRemove } from '@/extensionApi'
 
 Vue.use(VueI18n)
 
-const supportedLanguages = ['en', 'de', 'pt']
-
 const loadedLanguages = ['en']
 let currentLanguage = 'system'
 let actualLanguage = 'en'
@@ -31,7 +29,12 @@ export function _setLanguage(lang, updateStorage = true) {
 
   if (!lang || lang === 'system') {
     currentLanguage = 'system'
-    actualLanguage = /[^-]*/.exec(navigator.language)[0]
+    const navigatorLanguage = navigator.language.replace(/-/g, "_")
+    if (LANGUAGES_NOSTRIP.includes(navigatorLanguage)) {
+      actualLanguage = navigatorLanguage
+    } else {
+      actualLanguage = /[^-]*/.exec(navigator.language)[0]
+    }
     if (updateStorage) {
       storageRemove('language')
     }
@@ -42,8 +45,9 @@ export function _setLanguage(lang, updateStorage = true) {
       storageSet({ language: currentLanguage })
     }
   }
+  console.log(actualLanguage)
 
-  if (!supportedLanguages.includes(actualLanguage)) {
+  if (!LANGUAGES_SUPPORTED.includes(actualLanguage)) {
     actualLanguage = 'en'
   }
   // If the language was already loaded
@@ -68,5 +72,5 @@ storageGet('language').then(value => {
 export const setLanguage = value => _setLanguage(value)
 export const getLanguage = () => currentLanguage
 export const getActualLanguage = () => actualLanguage
-export const languageOptions = supportedLanguages
+export const languageOptions = LANGUAGES_SUPPORTED
 
