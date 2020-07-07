@@ -141,6 +141,7 @@ export default {
     },
     selectedLanguage(val) {
       setLanguage(val)
+      this.actualLanguage = getActualLanguage()
     },
     selectedIcon(val) {
       setIcon(val)
