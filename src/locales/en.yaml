@@ -65,7 +65,8 @@ preferences-recommend-feedback:
 language-system: System
 language-name-en: English
 language-name-de: German
-language-name-pt: Portuguese
+language-name-pt_BR: Portuguese (Brazil)
+language-name-pt_PT: Portuguese (Portugal)
 
 # Themes
 theme-system: Auto

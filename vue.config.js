@@ -1,5 +1,9 @@
 const CopyPlugin = require('copy-webpack-plugin')
 const yaml = require('yaml')
+const path = require('path')
+const fs = require('fs')
+
+const localesPath = path.join(__dirname, 'src/locales')
 
 module.exports = {
   lintOnSave: false,
@@ -41,5 +45,20 @@ module.exports = {
           },
         ],
       }])
+
+    config
+      .plugin('define')
+      .tap(args => {
+        const locales = fs.readdirSync(localesPath)
+          .filter(name => name.endsWith('.yaml'))
+          .map(name => name.slice(0, -5))
+        const noStrip = locales.filter(name => name.includes('_'))
+        args[0] = {
+          ...args[0],
+          LANGUAGES_SUPPORTED: JSON.stringify(locales),
+          LANGUAGES_NOSTRIP: JSON.stringify(noStrip),
+        }
+        return args
+      })
   },
 }
