@@ -17,7 +17,7 @@ npm install
 
 You can run the extension in your browser as a website by calling `npm run dev`.
 
-If you want to build to extension you can run `npm run dev`.
+If you want to build to extension you can run `npm run build`.
 After that, the unpacked extension will be in the `dist/` directory, ready to be tested in your browser.
 
 ## Contribution and Commits
@@ -27,3 +27,9 @@ If you want to help with translating tabby into more languages, copy the [Englis
 Contributions such as pull requests, reporting bugs and suggesting enhancements are always welcome!
 
 We're using [gitmoji](https://gitmoji.carloscuesta.me/) for all commits.
+
+### Contributers
+
+| Name                                                 | Type                   | Info                   |
+| :--------------------------------------------------- | :--------------------: | :--------------------- |
+| <a href="//github.com/RodrigoSaint">RodrigoSaint</a> | :globe_with_meridians: | Portuguese translation |
