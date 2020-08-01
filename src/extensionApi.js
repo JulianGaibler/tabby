@@ -1,6 +1,6 @@
 const [thisBrowser, chromeAPI] = (() => {
   if (typeof browser !== 'undefined') return [browser, false]
-  else if (typeof chrome !== 'undefined') return [chrome, true]
+  else if (window.chrome && chrome.runtime && chrome.runtime.id) return [chrome, true]
   else return [undefined, false]
 })()
 
@@ -52,7 +52,7 @@ export async function shortcutGet(key) {
 
 export async function storageGet(key) {
   if (!thisBrowser) {
-    return Promise.resolve(localStorage.getItem(key))
+    return Promise.resolve(lsGet(key))
   }
   let res
   if (chromeAPI) {
@@ -65,7 +65,7 @@ export async function storageGet(key) {
 
 export function storageSet(keys) {
   if (!thisBrowser) {
-    Object.keys(keys).forEach(key => localStorage.setItem(key, keys[key]))
+    Object.keys(keys).forEach(key => lsSet(key, keys[key]))
     return Promise.resolve()
   }
   if (chromeAPI) {
@@ -77,7 +77,7 @@ export function storageSet(keys) {
 
 export function storageRemove(key) {
   if (!thisBrowser) {
-    return Promise.resolve(localStorage.removeItem(key))
+    return Promise.resolve(lsRemove(key))
   }
   if (chromeAPI) {
     return new Promise(resolve => thisBrowser.storage.sync.remove(key, resolve))
@@ -93,4 +93,27 @@ export async function firstTimeSetup() {
     storageSet({ usedBefore: true })
     return true
   }
+}
+
+// Localstorage can only hold string-values (which isn't the case for the storage API extension use).
+// These functions should mimick the actual add-on storage api sufficiently
+function getStore() {
+  const store = localStorage.getItem('fake-store')
+  return store ? JSON.parse(store) : {}
+}
+function setStore(store) {
+  localStorage.setItem('fake-store', JSON.stringify(store))
+}
+function lsGet(key) {
+  return getStore()[key]
+}
+function lsSet(key, value) {
+  const store = getStore()
+  store[key] = value
+  setStore(store)
+}
+function lsRemove(key) {
+  const store = getStore()
+  delete store[key]
+  setStore(store)
 }

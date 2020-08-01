@@ -60,6 +60,14 @@ preferences-theme-explanation: "'Auto' usa o tema com base no seu sistema operac
 preferences-icon-headline: Icone
 preferences-icon-explanation: Escolhe o icone do botão do browser.
 
+# Improved Accessibility Settings
+# preferences-accessibility-headline:
+# preferences-accessibility-explanation:
+
+# Overview Settings
+# preferences-show-overview-headline:
+# preferences-show-overview-explanation:
+
 # Asking for Recommendation
 preferences-recommend-headline: Gosta do tabby?
 preferences-recommend-review: Compartilhe com seus amigos ou avalie!

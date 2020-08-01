@@ -60,6 +60,14 @@ preferences-accent-color-explanation: Die Farbe für Buttons und andere UI-Eleme
 preferences-icon-headline: Icon
 preferences-icon-explanation: Legt das Symbol für den Browser-Button fest.
 
+# # Improved Accessibility Settings
+preferences-accessibility-headline: Verbesserte Barrierefreiheit
+preferences-accessibility-explanation: Dieser Modus deaktiviert einige Funktionen, welche die Verwendung von Tabby für Benutzer von Screenreadern erschweren könnten.
+
+# Overview Settings
+preferences-show-overview-headline: Tab-Übersicht anzeigen
+preferences-show-overview-explanation: Beim öffnen von tabby alle tabs anzeigen
+
 # Asking for Recommendation
 preferences-recommend-headline: Gefällt dir tabby?
 preferences-recommend-review: Teile es mit deinen Freunden oder schreibe ein Review.
