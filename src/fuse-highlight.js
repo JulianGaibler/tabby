@@ -9,7 +9,7 @@ export default function(fuseSearchResult, highlightClassName = 'highlight') {
       obj = obj[pathValue[i]]
     }
 
-    obj[pathValue[i]] = value
+    obj[`${pathValue[i]}_hl`] = value
   }
 
   const generateHighlightedText = (inputText, regions = []) => {

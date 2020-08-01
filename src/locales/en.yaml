@@ -20,6 +20,13 @@ onboarding-about-settings: Also, you can click on the tabby icon next to the sea
 preferences-button: Preferences
 back-button: Back
 
+# Other buttons
+pin-tab-button: pin tab
+unpin-tab-button: unpin tab
+close-tab-button: close tab
+mute-tab-button: mute tab
+unmute-tab-button: unmute tab
+
 # Links to source code
 source-code: Source Code
 
@@ -47,7 +54,11 @@ preferences-language-contribute:
 preferences-theme-headline: Theme
 preferences-theme-explanation: "'Auto' selects the theme based on the systems theme."
 
-# Theme Settings
+# Accent Color Settings
+preferences-accent-color-headline: Accent Color
+preferences-accent-color-explanation: The color for buttons and other UI controls.
+
+# Icon Settings
 preferences-icon-headline: Icon
 preferences-icon-explanation: Sets the icon for the browser button.
 
@@ -72,6 +83,16 @@ language-name-pt_PT: Portuguese (Portugal)
 theme-system: Auto
 theme-light: Light
 theme-dark: Dark
+
+# Accent Colors
+accent-color-blue: Blue
+accent-color-purple: Purple
+accent-color-pink: Pink
+accent-color-red: Red
+accent-color-orange: Orange
+accent-color-yellow: Yellow
+accent-color-green: Green
+accent-color-grey: Grey
 
 # Icons
 icon-default: Eye (default)

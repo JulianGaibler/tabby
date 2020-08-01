@@ -15,9 +15,22 @@ export async function queryTabs(options) {
   }
 }
 
-export function updateTabs(id) {
+export function updateTabs(id, obj) {
   if (!thisBrowser) { return }
-  thisBrowser.tabs.update(id, { active: true })
+  if (chromeAPI) {
+    return new Promise(resolve => thisBrowser.tabs.update(id, obj, resolve))
+  } else {
+    return thisBrowser.tabs.update(id, obj)
+  }
+}
+
+export function closeTab(id) {
+  if (!thisBrowser) { return }
+  if (chromeAPI) {
+    return new Promise(resolve => thisBrowser.tabs.remove(id, resolve))
+  } else {
+    return thisBrowser.tabs.remove(id)
+  }
 }
 
 export async function shortcutGet(key) {
