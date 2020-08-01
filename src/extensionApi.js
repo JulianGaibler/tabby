@@ -86,15 +86,6 @@ export function storageRemove(key) {
   }
 }
 
-export async function firstTimeSetup() {
-  if (await storageGet('usedBefore')) {
-    return false
-  } else {
-    storageSet({ usedBefore: true })
-    return true
-  }
-}
-
 // Localstorage can only hold string-values (which isn't the case for the storage API extension use).
 // These functions should mimick the actual add-on storage api sufficiently
 function getStore() {

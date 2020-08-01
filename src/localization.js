@@ -45,7 +45,6 @@ export function _setLanguage(lang, updateStorage = true) {
       storageSet({ language: currentLanguage })
     }
   }
-  console.log(actualLanguage)
 
   if (!LANGUAGES_SUPPORTED.includes(actualLanguage)) {
     actualLanguage = 'en'

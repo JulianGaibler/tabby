@@ -113,6 +113,7 @@
         </label>
         <div class="switch-box">
           <input
+            v-if="showOverview !== null"
             v-model="showOverview"
             @change="onShowOverview"
             id="input-show-overview"
@@ -128,6 +129,7 @@
         </label>
         <div class="switch-box">
           <input
+            v-if="accessibility !== null"
             v-model="accessibility"
             @change="onAccessibility"
             id="input-accessibility"
@@ -199,8 +201,8 @@ export default {
   mounted() {
     this.$refs.backbutton.focus()
     shortcutGet('_execute_browser_action').then(val => this.selectedShortcut = val)
-    getPref(PREFS.SHOW_OVERVIEW).then(val => { console.log('OVERVIEW', val); this.showOverview = val })
-    getPref(PREFS.IMPROVED_ACCESSIBILITY).then(val => { console.log('ACCESSIBILITY', val); this.accessibility = val })
+    getPref(PREFS.SHOW_OVERVIEW).then(val => this.showOverview = val )
+    getPref(PREFS.IMPROVED_ACCESSIBILITY).then(val => this.accessibility = val )
   },
   methods: {
     onSelectedTheme() {
@@ -226,7 +228,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="stylus">
 @import "~@/assets/styles/palette"
 
