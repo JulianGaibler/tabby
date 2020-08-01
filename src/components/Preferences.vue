@@ -266,6 +266,7 @@ export default {
           margin-top .25rem
       > input, select, #input-shortcut
         themed border seperator-color 1px solid
+        themed background-color background-odd
         themed background-color light-background
         themed color input-color
         box-sizing border-box
