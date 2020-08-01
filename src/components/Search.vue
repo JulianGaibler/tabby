@@ -161,7 +161,7 @@ export default {
           break
         case 'tab':
           focusInput = false
-          if (inputFocused) this.$refs.items[this.highlighted].$el.focus()
+          if (inputFocused && !event.shiftKey) this.$refs.items[this.highlighted].$el.focus()
           break
         case 'escape':
           window.close()
