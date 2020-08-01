@@ -56,11 +56,9 @@ import Fuse from 'fuse.js/dist/fuse.basic.esm.js'
 import Vue from 'vue'
 import debounce from 'debounce'
 import highlight from '@/fuse-highlight'
-import { queryTabs, updateTabs, closeTab, firstTimeSetup } from '@/extensionApi'
+import { queryTabs, updateTabs, closeTab } from '@/extensionApi'
 import { PREFS, getPref } from '@/general-preferences'
-
 import TabItem from '@/components/TabItem.vue'
-
 import TabbyIcon from '@/assets/tabby-icon.svg?inline'
 
 const INDEX_OPTIONS = { keys: ['title', 'url'],  includeMatches: true }
@@ -68,9 +66,10 @@ const INDEX_OPTIONS = { keys: ['title', 'url'],  includeMatches: true }
 export default {
   name: 'Search',
   components: {
-    TabbyIcon, TabItem,
+    TabbyIcon,
+    TabItem,
   },
-  data () {
+  data() {
     return {
       searchString: '',
       results: [],
@@ -86,52 +85,67 @@ export default {
     // Register event listener
     document.addEventListener('keydown', this.handleInput)
 
-    const [tabs, showOverview, accessibility] = await Promise.all([
+    const [tabs, showOverview, accessibility, usedBefore] = await Promise.all([
       queryTabs({ currentWindow: true }),
       getPref(PREFS.SHOW_OVERVIEW),
       getPref(PREFS.IMPROVED_ACCESSIBILITY),
+      getPref(PREFS.USED_BEFORE),
     ])
 
     this.userPrefs = { showOverview, accessibility }
     this.totalTabs = tabs.length
 
-    const myIndex = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
-    this.fuseInstance = new Fuse(tabs, INDEX_OPTIONS, myIndex)
-    this.handleSearch()
-    firstTimeSetup().then(r => {
-      this.showFirstTime = r
-    })
+    // Create fuzzy search instance
+    const index = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
+    this.fuseInstance = new Fuse(tabs, INDEX_OPTIONS, index)
+
+    if (usedBefore) {
+      // Pretend the user did a search so the correct element is focused
+      this.handleSearch()
+    } else {
+      this.showFirstTime = true
+    }
   },
   unmount() {
     document.removeEventListener('keydown', this.handleInput)
   },
   methods: {
-    async reload(focusInput=true) {
+    async reload(focusInput = true) {
       let tabs = await queryTabs({ currentWindow: true })
 
       this.totalTabs = tabs.length
 
-      const myIndex = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
-      this.fuseInstance.setCollection(tabs, myIndex)
+      const index = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
+      this.fuseInstance.setCollection(tabs, index)
       this.handleSearch(true)
-      if (focusInput && !this.userPrefs.accessibility) this.$refs.searchinput.focus()
+      if (focusInput && !this.userPrefs.accessibility) {
+        this.$refs.searchinput.focus()
+      }
     },
-    handleSearch: debounce(function(keepPosition=false) {
+    handleSearch: debounce(function(keepPosition = false) {
       this.showFirstTime = false
       this.hideNoResult = true
 
-      if (!this.fuseInstance) return
+      if (!this.fuseInstance) {
+        return
+      }
 
       if (this.searchString.length < 1) {
-        if (this.userPrefs.showOverview) this.results = this.fuseInstance._myIndex.docs
+        if (this.userPrefs.showOverview) {
+          this.results = this.fuseInstance._myIndex.docs
+        }
       } else {
         this.results = highlight(this.fuseInstance.search(this.searchString))
       }
 
       if (keepPosition === true) {
-        Vue.nextTick(() => this.focusTab(Math.min(this.results.length, this.highlighted)))
+        Vue.nextTick(() =>
+          this.focusTab(Math.min(this.results.length, this.highlighted)),
+        )
       } else if (this.searchString.length < 1) {
-        Vue.nextTick(() => this.focusTab(this.results.findIndex(tab => tab.active)))
+        Vue.nextTick(() =>
+          this.focusTab(this.results.findIndex(tab => tab.active)),
+        )
       } else {
         Vue.nextTick(() => this.focusTab(0))
       }
@@ -143,7 +157,9 @@ export default {
       const inputFocused = document.activeElement === this.$refs.searchinput
       let focusInput = !event.altKey
       if (event.altKey) {
-        if (inputFocused) this.$refs.items[this.highlighted].$el.focus()
+        if (inputFocused) {
+          this.focusCurrentItem(true)
+        }
         switch (event.code) {
         case 'KeyP':
           this.pinTab(this.highlighted)
@@ -152,7 +168,9 @@ export default {
           this.muteTab(this.highlighted)
           break
         case 'Backspace':
-          this.closeTab(this.results[this.highlighted].id)
+          if (this.results[this.highlighted]) {
+            this.closeTab(this.results[this.highlighted].id)
+          }
           break
         default:
           focusInput = true
@@ -160,15 +178,19 @@ export default {
       } else {
         switch (key) {
         case 'arrowdown':
-          this.focusTab(this.highlighted+1)
+          this.focusTab(this.highlighted + 1)
           break
         case 'arrowup':
-          this.focusTab(this.highlighted-1)
+          this.focusTab(this.highlighted - 1)
           break
         case 'tab':
           focusInput = false
-          if (inputFocused && !event.shiftKey && !this.userPrefs.accessibility) {
-            this.$refs.items[this.highlighted].$el.focus()
+          if (
+            inputFocused &&
+              !event.shiftKey &&
+              !this.userPrefs.accessibility
+          ) {
+            this.focusCurrentItem()
           }
           break
         case 'escape':
@@ -176,16 +198,33 @@ export default {
           break
         case 'enter':
           focusInput = false
-          if (inputFocused) this.openTab(this.results[this.highlighted].id)
+          if (inputFocused) {
+            this.openTab(this.results[this.highlighted].id)
+          }
           break
         case 'delete':
-          if (inputFocused && this.$refs.searchinput.selectionStart == this.searchString.length) this.closeTab(this.results[this.highlighted].id)
+          if (
+            inputFocused &&
+              this.results[this.highlighted] &&
+              this.$refs.searchinput.selectionStart == this.searchString.length
+          ) {
+            this.closeTab(this.results[this.highlighted].id)
+          }
           break
         }
       }
-      if (focusInput && !this.userPrefs.accessibility) this.$refs.searchinput.focus()
+      if (focusInput && !this.userPrefs.accessibility) {
+        this.$refs.searchinput.focus()
+      }
     },
-    focusTab(index, byClick=false, el=null) {
+    focusCurrentItem(blurOtherwise = false) {
+      if (this.$refs.items[this.highlighted]) {
+        this.$refs.items[this.highlighted].$el.focus()
+      } else if (blurOtherwise) {
+        this.$refs.searchinput.blur()
+      }
+    },
+    focusTab(index, byClick = false, el = null) {
       if (index < 0 || index >= this.results.length) {
         return
       }
@@ -205,17 +244,16 @@ export default {
     },
     pinTab(index) {
       const tab = this.results[index]
-      updateTabs(tab.id, { pinned: !tab.pinned })
-        .then(() => this.reload())
+      updateTabs(tab.id, { pinned: !tab.pinned }).then(() => this.reload())
     },
     muteTab(index) {
       const tab = this.results[index]
-      updateTabs(tab.id, { muted: !tab.mutedInfo.muted })
-        .then(() => this.reload(false))
+      updateTabs(tab.id, { muted: !tab.mutedInfo.muted }).then(() =>
+        this.reload(false),
+      )
     },
     closeTab(id) {
-      closeTab(id)
-        .then(() => this.reload())
+      closeTab(id).then(() => this.reload())
     },
   },
 }

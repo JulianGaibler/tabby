@@ -6,6 +6,7 @@ const cache = {}
 export const PREFS = {
   SHOW_OVERVIEW: 'show-overview',
   IMPROVED_ACCESSIBILITY: 'improved-accessibility',
+  USED_BEFORE: 'usedBefore',
 }
 
 export async function getPref(name) {
@@ -20,6 +21,9 @@ export async function getPref(name) {
   case PREFS.SHOW_OVERVIEW:
     return true
   case PREFS.IMPROVED_ACCESSIBILITY:
+    return false
+  case PREFS.USED_BEFORE:
+    setPref(PREFS.USED_BEFORE, true)
     return false
   default:
     throw new Error('Unknown Pref!')
