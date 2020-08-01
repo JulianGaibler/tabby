@@ -96,6 +96,7 @@ export default {
     height 2rem
     border-radius 50%
     themed background background-odd
+    themed background light-background
     span, img
       display block
       width 16px
@@ -152,7 +153,7 @@ export default {
       padding-top .2em
       padding-bottom .2em
       margin 0
-      background-color rgba(0, 0, 0, 0.03)
+      background-color rgba(0, 0, 0, 0.05)
       border-radius 6px
       &::before, &::after
         letter-spacing -0.2em
@@ -161,10 +162,13 @@ export default {
     themed background-color background-odd
     .favicon, .actions button:not(.enabled)
       themed background-color background
+      themed background light-background
 
   &.active, &:focus
     themed background-color accent-color
     themed color selected-color
+    .favicon
+      background rgba(0,0,0,0.1)
     .actions button
       background rgba(0,0,0,0.1)
       svg
