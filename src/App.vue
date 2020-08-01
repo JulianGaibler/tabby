@@ -43,7 +43,6 @@ export default {
   html, body
     margin 0
     width 600px
-    height 100%
     font-family -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif
   #app > *
     max-height 500px
