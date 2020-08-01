@@ -1,7 +1,7 @@
 <template>
   <div id="settings">
     <nav class="top-bar">
-      <button :aria-label="$t('back-button')" @click="$emit('close')"><ArrowBack/></button>
+      <button ref="backbutton" :aria-label="$t('back-button')" @click="$emit('close')"><ArrowBack/></button>
       <h1>{{ $t('preferences-header') }}</h1>
     </nav>
     <hr>
@@ -33,7 +33,7 @@
           </i18n>
         </label>
         <div>
-          <select id="input-language"  v-model="selectedLanguage">
+          <select id="input-language" v-model="selectedLanguage" @change="onSelectedLanguage">
             <option
               value="system"
               :selected="selectedLanguage === 'system'">
@@ -54,7 +54,7 @@
           <p>{{ $t('preferences-theme-explanation') }}</p>
         </label>
         <div>
-          <select id="input-theme"  v-model="selectedTheme">
+          <select id="input-theme" v-model="selectedTheme" @change="onSelectedTheme">
             <option value="system" :selected="selectedTheme === 'system'">{{ $t('theme-system') }}</option>
             <option
               v-for="{id, tag} in themes"
@@ -71,7 +71,7 @@
           <p>{{ $t('preferences-icon-explanation') }}</p>
         </label>
         <div>
-          <select id="input-icon"  v-model="selectedIcon">
+          <select id="input-icon" v-model="selectedIcon" @change="onSelectedIcon">
             <option value="default" :selected="selectedIcon === 'default'">{{ $t('icon-default') }}</option>
             <option
               v-for="{id, tag} in icons"
@@ -83,7 +83,7 @@
       </section>
 
       <section>
-        <label for="input-accent-color">
+        <label for="accent-color-radio">
           <h2>{{ $t('preferences-accent-color-headline') }}</h2>
           <p>{{ $t('preferences-accent-color-explanation') }}</p>
         </label>
@@ -97,12 +97,42 @@
                 :id="id"
                 :style="{ background: color }"
                 v-model="selectedAccentColor"
+                @change="onSelectedAccentColor"
                 :value="id"
                 :checked="selectedAccentColor === id">
               <label :for="id">{{ $t(tag) }}</label>
             </div>
           </div>
+        </div>
+      </section>
 
+      <section>
+        <label for="input-show-overview">
+          <h2>{{ $t('preferences-show-overview-headline') }}</h2>
+          <p>{{ $t('preferences-show-overview-explanation') }}</p>
+        </label>
+        <div class="switch-box">
+          <input
+            v-model="showOverview"
+            @change="onShowOverview"
+            id="input-show-overview"
+            type="checkbox"
+            class="switch" />
+        </div>
+      </section>
+
+      <section>
+        <label for="input-accessibility">
+          <h2>{{ $t('preferences-accessibility-headline') }}</h2>
+          <p>{{ $t('preferences-accessibility-explanation') }}</p>
+        </label>
+        <div class="switch-box">
+          <input
+            v-model="accessibility"
+            @change="onAccessibility"
+            id="input-accessibility"
+            type="checkbox"
+            class="switch" />
         </div>
       </section>
 
@@ -134,6 +164,7 @@ import WelsIcon from '@/assets/wels-logo-mini.svg?inline'
 import { shortcutGet, isChromeAPI } from '@/extensionApi'
 import { setLanguage, getLanguage, getActualLanguage, languageOptions } from '@/localization'
 import { setTheme, getTheme, getAccentColor, setAccentColor, themeOptions, setIcon, getIcon, iconOptions, accentColorMap } from '@/theme'
+import { PREFS, getPref, setPref } from '@/general-preferences'
 
 const clientVersion = require('@/../package.json').version
 const languages = languageOptions.map(option => ({ id: option, tag: `language-name-${option}` }))
@@ -161,24 +192,35 @@ export default {
       selectedTheme: getTheme(),
       selectedAccentColor: getAccentColor(),
       selectedIcon: getIcon(),
+      showOverview: null,
+      accessibility: null,
     }
   },
-  async mounted() {
-    this.selectedShortcut = await shortcutGet('_execute_browser_action')
+  mounted() {
+    this.$refs.backbutton.focus()
+    shortcutGet('_execute_browser_action').then(val => this.selectedShortcut = val)
+    getPref(PREFS.SHOW_OVERVIEW).then(val => { console.log('OVERVIEW', val); this.showOverview = val })
+    getPref(PREFS.IMPROVED_ACCESSIBILITY).then(val => { console.log('ACCESSIBILITY', val); this.accessibility = val })
   },
-  watch: {
-    selectedTheme(val) {
-      setTheme(val)
+  methods: {
+    onSelectedTheme() {
+      setTheme(this.selectedTheme)
     },
-    selectedAccentColor(val) {
-      setAccentColor(val)
+    onSelectedAccentColor() {
+      setAccentColor(this.selectedAccentColor)
     },
-    selectedLanguage(val) {
-      setLanguage(val)
+    onSelectedLanguage() {
+      setLanguage(this.selectedLanguage)
       this.actualLanguage = getActualLanguage()
     },
-    selectedIcon(val) {
-      setIcon(val)
+    onSelectedIcon() {
+      setIcon(this.selectedIcon)
+    },
+    onShowOverview() {
+      setPref(PREFS.SHOW_OVERVIEW, this.showOverview)
+    },
+    onAccessibility() {
+      setPref(PREFS.IMPROVED_ACCESSIBILITY, this.accessibility)
     },
   },
 }
@@ -237,6 +279,10 @@ export default {
         background-position right 10px center
         background-size 16px
         padding-right 30px
+      .switch-box
+        display flex
+        align-items center
+        padding-left 2rem
     > footer
       text-align center
       padding 1rem
@@ -255,6 +301,29 @@ export default {
     a
       color inherit
       text-decoration none
+
+
+input.switch
+  appearance none
+  position relative
+  display block
+  themed background input-color
+  height 1.25rem
+  width 2.25rem
+  border-radius 1.25rem
+  padding .25rem
+  transition padding .15s, background .15s
+  &::after
+    position absolute
+    content ''
+    display block
+    background white
+    height .75rem
+    width .75rem
+    border-radius .75rem
+  &:checked
+    themed background accent-color-light
+    padding-left 1.25rem
 
 
 .color-picker

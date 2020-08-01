@@ -57,6 +57,7 @@ import Vue from 'vue'
 import debounce from 'debounce'
 import highlight from '@/fuse-highlight'
 import { queryTabs, updateTabs, closeTab, firstTimeSetup } from '@/extensionApi'
+import { PREFS, getPref } from '@/general-preferences'
 
 import TabItem from '@/components/TabItem.vue'
 
@@ -78,13 +79,20 @@ export default {
       fuseInstance: undefined,
       showFirstTime: false,
       hideNoResult: true,
+      userPrefs: null,
     }
   },
   async mounted() {
+    // Register event listener
     document.addEventListener('keydown', this.handleInput)
 
-    let tabs = await queryTabs({ currentWindow: true })
+    const [tabs, showOverview, accessibility] = await Promise.all([
+      queryTabs({ currentWindow: true }),
+      getPref(PREFS.SHOW_OVERVIEW),
+      getPref(PREFS.IMPROVED_ACCESSIBILITY),
+    ])
 
+    this.userPrefs = { showOverview, accessibility }
     this.totalTabs = tabs.length
 
     const myIndex = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
@@ -106,17 +114,16 @@ export default {
       const myIndex = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
       this.fuseInstance.setCollection(tabs, myIndex)
       this.handleSearch(true)
-      if (focusInput) this.$refs.searchinput.focus()
+      if (focusInput && !this.userPrefs.accessibility) this.$refs.searchinput.focus()
     },
     handleSearch: debounce(function(keepPosition=false) {
-      // Reset flags
       this.showFirstTime = false
       this.hideNoResult = true
 
       if (!this.fuseInstance) return
 
       if (this.searchString.length < 1) {
-        this.results = this.fuseInstance._myIndex.docs
+        if (this.userPrefs.showOverview) this.results = this.fuseInstance._myIndex.docs
       } else {
         this.results = highlight(this.fuseInstance.search(this.searchString))
       }
@@ -133,7 +140,6 @@ export default {
     }, 100),
     handleInput(event) {
       const key = event.key.toLowerCase()
-      console.log(event)
       const inputFocused = document.activeElement === this.$refs.searchinput
       let focusInput = !event.altKey
       if (event.altKey) {
@@ -161,7 +167,9 @@ export default {
           break
         case 'tab':
           focusInput = false
-          if (inputFocused && !event.shiftKey) this.$refs.items[this.highlighted].$el.focus()
+          if (inputFocused && !event.shiftKey && !this.userPrefs.accessibility) {
+            this.$refs.items[this.highlighted].$el.focus()
+          }
           break
         case 'escape':
           window.close()
@@ -171,11 +179,11 @@ export default {
           if (inputFocused) this.openTab(this.results[this.highlighted].id)
           break
         case 'delete':
-          this.closeTab(this.results[this.highlighted].id)
+          if (inputFocused && this.$refs.searchinput.selectionStart == this.searchString.length) this.closeTab(this.results[this.highlighted].id)
           break
         }
       }
-      if (focusInput) this.$refs.searchinput.focus()
+      if (focusInput && !this.userPrefs.accessibility) this.$refs.searchinput.focus()
     },
     focusTab(index, byClick=false, el=null) {
       if (index < 0 || index >= this.results.length) {
