@@ -20,6 +20,11 @@ onboarding-about-settings: Außerdem kannst du für weitere Einstellungen auf da
 preferences-button: Einstellungen
 back-button: Zurück
 
+# Other buttons
+pin-tab-button: Tab anheften
+unpin-tab-button: Tab ablösen
+close-tab-button: Tab schließen
+
 # Links to source code
 source-code: Quellcode
 
@@ -47,7 +52,11 @@ preferences-language-contribute:
 preferences-theme-headline: Designs
 preferences-theme-explanation: "'Auto' wählt das Erscheinungsbild automatisch aus."
 
-# Theme Settings
+# Accent Color Settings
+preferences-accent-color-headline: Akzentfarbe
+preferences-accent-color-explanation: Die Farbe für Buttons und andere UI-Elemente.
+
+# Icon Settings
 preferences-icon-headline: Icon
 preferences-icon-explanation: Legt das Symbol für den Browser-Button fest.
 
@@ -69,6 +78,16 @@ language-name-de: German
 theme-system: Auto
 theme-light: Hell
 theme-dark: Dunkel
+
+# Accent Colors
+accent-color-blue: Blau
+accent-color-purple: Lila
+accent-color-pink: Pink
+accent-color-red: Rot
+accent-color-orange: Orange
+accent-color-yellow: Gelb
+accent-color-green: Grün
+accent-color-grey: Grau
 
 # Icons
 icon-default: Auge (Standard)

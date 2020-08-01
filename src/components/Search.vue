@@ -4,16 +4,14 @@
       <button :aria-label="$t('preferences-button')" @click="$emit('showSettings')"><TabbyIcon/></button>
       <input
         autofocus
+        ref="searchinput"
         :aria-label="$t('search-input.aria-label')"
         :placeholder="$t('search-input.placeholder')"
         spellcheck="false"
         type="text"
         v-model="searchString"
-        @input="handleSearch"
-        @keydown.down="handleInput('down')"
-        @keydown.up="handleInput('up')"
-        @keydown.escape="handleInput('escape')"
-        @keydown.enter="handleInput('enter')">
+        @input="handleSearch">
+      <div v-if="totalTabs" class="tab-counter"><span>{{ totalTabs }}</span></div>
     </div>
     <template v-if="showFirstTime">
       <hr>
@@ -39,8 +37,11 @@
           v-for="(tab, index) in results"
           ref="items"
           @click="openTab(tab.id)"
-          @mouseDown="focusTab(index, true)"
+          @mouseDown="el => focusTab(index, true, el)"
           @focus="focusTab(index, true)"
+          @pinTab="pinTab(index)"
+          @muteTab="muteTab(index)"
+          @closeTab="closeTab(tab.id)"
           :key="index.id"
           :tab="tab"
           :active="index === highlighted"/>
@@ -52,13 +53,16 @@
 <script>
 // eslint-disable-next-line
 import Fuse from 'fuse.js/dist/fuse.basic.esm.js'
+import Vue from 'vue'
 import debounce from 'debounce'
 import highlight from '@/fuse-highlight'
-import { queryTabs, updateTabs, firstTimeSetup } from '@/extensionApi'
+import { queryTabs, updateTabs, closeTab, firstTimeSetup } from '@/extensionApi'
 
 import TabItem from '@/components/TabItem.vue'
 
 import TabbyIcon from '@/assets/tabby-icon.svg?inline'
+
+const INDEX_OPTIONS = { keys: ['title', 'url'],  includeMatches: true }
 
 export default {
   name: 'Search',
@@ -69,6 +73,7 @@ export default {
     return {
       searchString: '',
       results: [],
+      totalTabs: false,
       highlighted: 0,
       fuseInstance: undefined,
       showFirstTime: false,
@@ -76,49 +81,103 @@ export default {
     }
   },
   async mounted() {
+    document.addEventListener('keydown', this.handleInput)
+
     let tabs = await queryTabs({ currentWindow: true })
 
-    const options = { keys: ['title', 'url'],  includeMatches: true }
-    const myIndex = Fuse.createIndex(options.keys, tabs)
-    this.fuseInstance = new Fuse(tabs, options, myIndex)
+    this.totalTabs = tabs.length
+
+    const myIndex = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
+    this.fuseInstance = new Fuse(tabs, INDEX_OPTIONS, myIndex)
+    this.handleSearch()
     firstTimeSetup().then(r => {
       this.showFirstTime = r
     })
   },
+  unmount() {
+    document.removeEventListener('keydown', this.handleInput)
+  },
   methods: {
-    handleSearch: debounce(function() {
+    async reload(focusInput=true) {
+      let tabs = await queryTabs({ currentWindow: true })
+
+      this.totalTabs = tabs.length
+
+      const myIndex = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
+      this.fuseInstance.setCollection(tabs, myIndex)
+      this.handleSearch(true)
+      if (focusInput) this.$refs.searchinput.focus()
+    },
+    handleSearch: debounce(function(keepPosition=false) {
+      // Reset flags
       this.showFirstTime = false
       this.hideNoResult = true
-      if (!this.fuseInstance || this.searchString.length < 1) {
-        this.results = []
-        return
+
+      if (!this.fuseInstance) return
+
+      if (this.searchString.length < 1) {
+        this.results = this.fuseInstance._myIndex.docs
+      } else {
+        this.results = highlight(this.fuseInstance.search(this.searchString))
       }
-      this.results = highlight(this.fuseInstance.search(this.searchString))
-        .map((item) => ({
-          title: item.title,
-          url: item.url,
-          favIconUrl: item.favIconUrl,
-          id: item.id,
-        }))
+
+      if (keepPosition === true) {
+        Vue.nextTick(() => this.focusTab(Math.min(this.results.length, this.highlighted)))
+      } else if (this.searchString.length < 1) {
+        Vue.nextTick(() => this.focusTab(this.results.findIndex(tab => tab.active)))
+      } else {
+        Vue.nextTick(() => this.focusTab(0))
+      }
+
       this.hideNoResult = false
     }, 100),
-    handleInput(key) {
-      switch (key) {
-      case 'down':
-        this.focusTab(this.highlighted+1)
-        break
-      case 'up':
-        this.focusTab(this.highlighted-1)
-        break
-      case 'escape':
-        window.close()
-        break
-      case 'enter':
-        this.openTab(this.results[this.highlighted].id)
-        break
+    handleInput(event) {
+      const key = event.key.toLowerCase()
+      console.log(event)
+      const inputFocused = document.activeElement === this.$refs.searchinput
+      let focusInput = !event.altKey
+      if (event.altKey) {
+        if (inputFocused) this.$refs.items[this.highlighted].$el.focus()
+        switch (event.code) {
+        case 'KeyP':
+          this.pinTab(this.highlighted)
+          break
+        case 'KeyM':
+          this.muteTab(this.highlighted)
+          break
+        case 'Backspace':
+          this.closeTab(this.results[this.highlighted].id)
+          break
+        default:
+          focusInput = true
+        }
+      } else {
+        switch (key) {
+        case 'arrowdown':
+          this.focusTab(this.highlighted+1)
+          break
+        case 'arrowup':
+          this.focusTab(this.highlighted-1)
+          break
+        case 'tab':
+          focusInput = false
+          if (inputFocused) this.$refs.items[this.highlighted].$el.focus()
+          break
+        case 'escape':
+          window.close()
+          break
+        case 'enter':
+          focusInput = false
+          if (inputFocused) this.openTab(this.results[this.highlighted].id)
+          break
+        case 'delete':
+          this.closeTab(this.results[this.highlighted].id)
+          break
+        }
       }
+      if (focusInput) this.$refs.searchinput.focus()
     },
-    focusTab(index, byClick=false) {
+    focusTab(index, byClick=false, el=null) {
       if (index < 0 || index >= this.results.length) {
         return
       }
@@ -128,10 +187,27 @@ export default {
           block: 'center',
         })
       }
+      if (el) {
+        el.focus()
+      }
     },
     openTab(id) {
       updateTabs(id, { active: true })
       window.close()
+    },
+    pinTab(index) {
+      const tab = this.results[index]
+      updateTabs(tab.id, { pinned: !tab.pinned })
+        .then(() => this.reload())
+    },
+    muteTab(index) {
+      const tab = this.results[index]
+      updateTabs(tab.id, { muted: !tab.mutedInfo.muted })
+        .then(() => this.reload(false))
+    },
+    closeTab(id) {
+      closeTab(id)
+        .then(() => this.reload())
     },
   },
 }
@@ -145,18 +221,32 @@ export default {
     flex-shrink 0
     display flex
     align-items stretch
-    height 50px
+    height 56px
     themed background background-odd
     input
       flex 1
       font-size 17px
-      padding 0 10px
       border none
       outline none
     button
-      width 50px
-      svg path
-        themed fill font-color
+      width 56px
+      svg
+        width 32px
+        height 32px
+        path
+          themed fill font-color
+    .tab-counter
+      display flex
+      justify-content center
+      align-items center
+      padding 0 1rem
+      span
+        display block
+        themed background background
+        themed color font-color-light
+        font-size 12px
+        border-radius 8px
+        padding .25rem .5rem
   .info
     display flex
     flex-direction column

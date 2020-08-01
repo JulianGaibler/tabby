@@ -20,6 +20,11 @@ onboarding-about-settings: Além disso, você pode clicar no icone do tabby pert
 preferences-button: Preferências
 back-button: Voltar
 
+# Other buttons
+pin-tab-button: fixar aba
+unpin-tab-button: desafixar aba
+close-tab-button: Fechar aba
+
 # Links to source code
 source-code: Código fonte
 
@@ -47,7 +52,11 @@ preferences-language-contribute:
 preferences-theme-headline: Tema
 preferences-theme-explanation: "'Auto' usa o tema com base no seu sistema operacional."
 
-# Theme Settings
+# Accent Color Settings
+# preferences-accent-color-headline:
+# preferences-accent-color-explanation:
+
+# Icon Settings
 preferences-icon-headline: Icone
 preferences-icon-explanation: Escolhe o icone do botão do browser.
 
@@ -69,6 +78,16 @@ language-name-pt_PT: Português (Portugal)
 theme-system: Automático
 theme-light: Claro
 theme-dark: Escuro
+
+# Accent Colors
+accent-color-blue: Azul
+accent-color-purple: Roxa
+accent-color-pink: Rosa
+accent-color-red: Vermelho
+accent-color-orange: Laranja
+accent-color-yellow: Amarelo
+accent-color-green: Verde
+accent-color-grey: Cinzento
 
 # Icons
 icon-default: Olho (default)

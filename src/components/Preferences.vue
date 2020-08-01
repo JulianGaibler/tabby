@@ -24,6 +24,7 @@
             :value="selectedShortcut">
         </div>
       </section>
+
       <section>
         <label for="input-language">
           <h2>{{ $t('preferences-language-headline') }}</h2>
@@ -46,6 +47,7 @@
           </select>
         </div>
       </section>
+
       <section>
         <label for="input-theme">
           <h2>{{ $t('preferences-theme-headline') }}</h2>
@@ -62,6 +64,7 @@
           </select>
         </div>
       </section>
+
       <section>
         <label for="input-icon">
           <h2>{{ $t('preferences-icon-headline') }}</h2>
@@ -78,6 +81,31 @@
           </select>
         </div>
       </section>
+
+      <section>
+        <label for="input-accent-color">
+          <h2>{{ $t('preferences-accent-color-headline') }}</h2>
+          <p>{{ $t('preferences-accent-color-explanation') }}</p>
+        </label>
+        <div>
+
+          <div class="color-picker">
+            <div v-for="{id, tag, color} in accentColors" :key="id">
+              <input
+                name="accent-color-radio"
+                type="radio"
+                :id="id"
+                :style="{ background: color }"
+                v-model="selectedAccentColor"
+                :value="id"
+                :checked="selectedAccentColor === id">
+              <label :for="id">{{ $t(tag) }}</label>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       <section>
         <label>
           <h2>{{ $t('preferences-recommend-headline') }}</h2>
@@ -105,11 +133,12 @@ import WelsIcon from '@/assets/wels-logo-mini.svg?inline'
 
 import { shortcutGet, isChromeAPI } from '@/extensionApi'
 import { setLanguage, getLanguage, getActualLanguage, languageOptions } from '@/localization'
-import { setTheme, getTheme, themeOptions, setIcon, getIcon, iconOptions } from '@/theme'
+import { setTheme, getTheme, getAccentColor, setAccentColor, themeOptions, setIcon, getIcon, iconOptions, accentColorMap } from '@/theme'
 
 const clientVersion = require('@/../package.json').version
 const languages = languageOptions.map(option => ({ id: option, tag: `language-name-${option}` }))
 const themes = themeOptions.map(option => ({ id: option, tag: `theme-${option}` }))
+const accentColors = Object.keys(accentColorMap).map(key => ({ id: key, tag: `accent-color-${key}`, color: accentColorMap[key][0] }))
 const icons = iconOptions.map(option => ({ id: option, tag: `icon-${option}` }))
 
 export default {
@@ -124,11 +153,13 @@ export default {
 
       languages,
       themes,
+      accentColors,
       icons,
       selectedShortcut: '',
       selectedLanguage: getLanguage(),
       actualLanguage: getActualLanguage(),
       selectedTheme: getTheme(),
+      selectedAccentColor: getAccentColor(),
       selectedIcon: getIcon(),
     }
   },
@@ -138,6 +169,9 @@ export default {
   watch: {
     selectedTheme(val) {
       setTheme(val)
+    },
+    selectedAccentColor(val) {
+      setAccentColor(val)
     },
     selectedLanguage(val) {
       setLanguage(val)
@@ -171,7 +205,7 @@ export default {
   > main
     padding 0 50px
     a
-      themed color brand-color
+      themed color accent-color-light
     section
       margin 1rem 0
       display flex
@@ -187,7 +221,7 @@ export default {
           font-weight 400
           margin 0
           margin-top .25rem
-      input, select
+      > input, select, #input-shortcut
         themed border seperator-color 1px solid
         themed background-color light-background
         themed color input-color
@@ -207,7 +241,6 @@ export default {
       text-align center
       padding 1rem
       font-size 13px
-      margin-top 3rem
       svg
         margin-left -1px
         path
@@ -222,4 +255,55 @@ export default {
     a
       color inherit
       text-decoration none
+
+
+.color-picker
+  display grid
+  grid-template-columns 1fr 1fr 1fr 1fr
+  input
+      appearance none
+      themed color font-color
+      flex-shrink 0
+      box-sizing border-box
+      height 1rem
+      width 1rem
+      position relative
+      margin 0.5rem 0.5rem 0.5rem 0.1rem
+      border-radius 50%
+      margin-bottom -5%
+      &:focus.focus-visible
+          box-shadow 0px 0px 0 .25rem rgba(white, 0.1)
+      &::before
+          border-radius 50%
+      &::after
+          border-radius 50%
+          content ''
+          display block
+          top -.5rem
+          left -.5rem
+          right -.5rem
+          bottom -.5rem
+          opacity 0
+          transition opacity .1s
+          position absolute
+          background #FFFFFF
+      &:active::after
+          opacity .1
+      &::before
+          content ''
+          display block
+          background #FFFFFF
+          width 100%
+          height 100%
+          transition transform 0.25s
+          transform scale(0)
+      &:checked::before
+          transform scale(0.4)
+    label
+      position absolute
+      left -10000px
+      top auto
+      width 1px
+      height 1px
+      overflow hidden
 </style>
