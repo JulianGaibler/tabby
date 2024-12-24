@@ -11,6 +11,9 @@ search-input:
 # (catpun) Text that appears if there are no search results
 search-no-result: Não encontramos nenhuma aba
 
+# Label for button with which open tabs are managed
+# search-tab-counter: "Manage {n, plural, =0 {tabs} one {open tab} other {{n} open tabs}}"
+
 # Onboarding text
 onboarding-headline: Obrigado por usar o tabby!
 onboarding-instructions: Digite qualquer coisa na caixa de texto para procurar na janela atual.
@@ -30,7 +33,6 @@ source-code: Código fonte
 
 # (catpun) Headline of preferences-page
 preferences-header: Preferências
-
 
 # Shortcut settings (shortcut is not changeable from within the extension)
 preferences-shortcut-headline: Abrir com atalho de teclado
@@ -107,7 +109,6 @@ icon-face-themed: Face (color)
 # Comment out if there is no localized version, so it can fall back to english.
 url-changing-shortcuts-firefox: https://support.mozilla.org/pt-PT/kb/gerir-os-atalhos-de-extensao-no-firefox
 # url-changing-shortcuts-chrome
-
 
 # These translations are for the manifest.json file
 manifest:

@@ -1,0 +1,138 @@
+@use 'tint/styles/bootstrap' as bootstrap
+@use './colors'
+
+
+@include bootstrap.generate-color-variables(colors.$colors)
+
+@media (prefers-color-scheme: dark)
+  @include bootstrap.generate-color-variables(colors.$colors-dark)
+
+.theme--light
+  @include bootstrap.generate-color-variables(colors.$colors)
+.theme--dark
+  @include bootstrap.generate-color-variables(colors.$colors-dark)
+
+
+@include bootstrap.generate-font-faces("~tint/fonts")
+
+@include bootstrap.full-bootstrap()
+
+html, body
+  width: 600px
+  overflow: hidden
+
+html
+  height: 100%
+  width: 600px
+body
+  min-height: 100%
+  display: flex
+  flex-direction: column
+  font: menu
+  user-select: none
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+*
+  scrollbar-color: var(--tint-text-secondary) var(--tint-bg)
+  scrollbar-width: thin
+  &::-webkit-scrollbar
+    width: .5em
+    height: .5em
+  &::-webkit-scrollbar-thumb
+    background: var(--tint-text-secondary)
+    border-radius: 2rem
+    // add margin around scrollbar
+    left: 2px
+    right: 2px
+
+@media (min-width: 1000px)
+  html, body
+    width: auto
+    background: #2d2424
+  #app
+    width: 600px
+    height: 500px
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.25)
+    border-radius: 8px
+    margin: 64px auto
+    overflow: hidden
+
+
+.chromeGroupColor
+  --special-color: #FFFFFF
+  --special-color-bg: #5F6368
+  &.blue
+    --special-color-bg: #1A73E8
+  &.red
+    --special-color-bg: #D93025
+  &.yellow
+    --special-color: #292929
+    --special-color-bg: #F9AB00
+  &.green
+    --special-color-bg: #188038
+  &.pink
+    --special-color-bg: #D01884
+  &.purple
+    --special-color-bg: #A142F4
+  &.cyan
+    --special-color-bg: #007B83
+  &.orange
+    --special-color: #292929
+    --special-color-bg: #FA903E
+  @media (prefers-color-scheme: dark)
+    --special-color: #292929
+    --special-color-bg: #DADCE0
+    &.blue
+      --special-color-bg: #8AB4F8
+    &.red
+      --special-color-bg: #F28B82
+    &.yellow
+      --special-color-bg: #FDD663
+    &.green
+      --special-color-bg: #81C995
+    &.pink
+      --special-color-bg: #FF8BCB
+    &.purple
+      --special-color-bg: #C58AF9
+    &.cyan
+      --special-color-bg: #78D9EC
+    &.orange
+      --special-color-bg: #FCAD70
+
+.firefoxContainer
+  --special-color: #5F6368
+  &.blue
+    --special-color: #0373C5
+  &.turquoise
+    --special-color: #00695C
+  &.green
+    --special-color: #388E3C
+  &.yellow
+    --special-color: #F57F17
+  &.orange
+    --special-color: #E65100
+  &.red
+    --special-color: #C12301
+  &.pink
+    --special-color: #C4109F
+  &.purple
+    --special-color: #7D1FC3
+  @media (prefers-color-scheme: dark)
+    --special-color: #DADCE0
+    &.blue
+      --special-color: #64B5F6
+    &.turquoise
+      --special-color: #80DEEA
+    &.green
+      --special-color: #81C784
+    &.yellow
+      --special-color: #FFF176
+    &.orange
+      --special-color: #FFB74D
+    &.red
+      --special-color: #FF8561
+    &.pink
+      --special-color: #F48FB1
+    &.purple
+      --special-color: #CE93D8

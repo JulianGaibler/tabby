@@ -1,51 +1,46 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_name__",
   "description": "__MSG_description__",
   "default_locale": "en",
-
-  "version": "0.0.0",
+  "version": "<generated from package.json>",
   "browser_specific_settings": {
     "gecko": {
       "id": "tabby@jwels.berlin",
       "strict_min_version": "70.0"
     }
   },
-
+  "developer": {
+    "name": "Julian Gaibler",
+    "url": "https://jwels.berlin"
+  },
   "icons": {
     "16": "tabby_icon_16.png",
     "48": "tabby_icon_48.png",
     "128": "tabby_icon_128.png"
   },
-
-  "permissions": [
-    "storage",
-    "tabs"
-  ],
-
-  "browser_action": {
+  "permissions": ["storage", "tabs", "tabGroups", "contextualIdentities"],
+  "action": {
     "default_title": "tabby",
     "default_popup": "index.html",
-
-    "theme_icons": [{
-      "dark": "/icons/tabby_icon_eye_light_16.png",
-      "light": "/icons/tabby_icon_eye_dark_16.png",
-      "size": 16
-    }, {
-      "dark": "/icons/tabby_icon_eye_light_48.png",
-      "light": "/icons/tabby_icon_eye_dark_48.png",
-      "size": 48
-    }, {
-      "dark": "/icons/tabby_icon_eye_light_128.png",
-      "light": "/icons/tabby_icon_eye_dark_128.png",
-      "size": 128
-    }]
+    "theme_icons": [
+      {
+        "dark": "/icons/tabby_icon_eye_light_16.png",
+        "light": "/icons/tabby_icon_eye_dark_16.png",
+        "size": 16
+      },
+      {
+        "dark": "/icons/tabby_icon_eye_light_48.png",
+        "light": "/icons/tabby_icon_eye_dark_48.png",
+        "size": 48
+      },
+      {
+        "dark": "/icons/tabby_icon_eye_light_128.png",
+        "light": "/icons/tabby_icon_eye_dark_128.png",
+        "size": 128
+      }
+    ]
   },
-
-  "background": {
-    "scripts": ["background.js"]
-  },
-
   "commands": {
     "_execute_browser_action": {
       "description": "__MSG_shortcutOpen__",

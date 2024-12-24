@@ -8,6 +8,9 @@ search-input:
   placeholder: Searrrch your tabs...
   aria-label: Search your tabs
 
+# Label for button with which open tabs are managed
+search-tab-counter: 'Manage {n, plural, =0 {tabs} one {open tab} other {{n} open tabs}}'
+
 # (catpun) Text that appears if there are no search results
 search-no-result: didn’t find any tabs
 
@@ -33,16 +36,15 @@ source-code: Source Code
 # (catpun) Headline of preferences-page
 preferences-header: Purrferences
 
-
 # Shortcut settings (shortcut is not changeable from within the extension)
-preferences-shortcut-headline: Open with keyboard shortcut
+preferences-shortcut-headline: Keyboard shortcut
 # url will be inserted into message where {0} is.
 # url is a link to an external documentation (see url-changing-shortcuts-*)
 preferences-shortcut-explanation:
   message: You can change the shortcut {0}.
   url: from your Browsers settings
 
-# Language Settings
+# Language settings
 preferences-language-headline: Language
 # url will be inserted into message where {0} is.
 # url is a link to the git repository
@@ -50,25 +52,29 @@ preferences-language-contribute:
   message: '{0} tabby into more languages.'
   url: Help to translate
 
-# Theme Settings
+# Theme settings
 preferences-theme-headline: Theme
 preferences-theme-explanation: "'Auto' selects the theme based on the systems theme."
 
-# Accent Color Settings
+# Accent color settings
 preferences-accent-color-headline: Accent Color
 preferences-accent-color-explanation: The color for buttons and other UI controls.
 
-# Icon Settings
+# Icon settings
 preferences-icon-headline: Icon
 preferences-icon-explanation: Sets the icon for the browser button.
 
-# Improved Accessibility Settings
-preferences-accessibility-headline: Improved Accessibility
-preferences-accessibility-explanation: This mode disables some features that could make tabby more difficult to use for users of screen readers.
-
-# Overview Settings
+# Overview settings
 preferences-show-overview-headline: Show tab overview
 preferences-show-overview-explanation: Show all open tabs when you open tabby
+
+# Tab groups settings
+preferences-show-tab-groups-headline: Show tab groups
+preferences-show-tab-groups-explanation: Show which tab group a tab is in
+
+# Container tabs settings
+preferences-show-tab-containers-headline: Show container tabs
+preferences-show-tab-containers-explanation: Show which container a tab is in
 
 # Asking for Recommendation
 preferences-recommend-headline: Do you like tabby?
@@ -112,7 +118,6 @@ icon-face-themed: Face (color)
 # Comment out if there is no localized version, so it can fall back to english.
 url-changing-shortcuts-firefox: https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox
 url-changing-shortcuts-chrome: https://jwels.berlin/chrome-shortcuts/
-
 
 # These translations are for the manifest.json file
 manifest:

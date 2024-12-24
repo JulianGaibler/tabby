@@ -1,49 +1,58 @@
-![tabby](http://qvieo.com/githubimg/banner_tabby.png)
+# create-svelte
 
-## Introduction
+Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
-tabby is a browser extension to help you switch between tabs in a breeze.
+Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
 
-## Setup and Configuration
+## Creating a project
 
-Since this is an extension that uses privileged browser APIs a lot of features won't work in dev-mode.
+If you're seeing this, you've probably already done this step. Congrats!
 
-To install dependencies, run and build tabby, you need node and npm. When you have done this, you can navigate into the directory and install the dependencies.
+```bash
+# create a new project in the current directory
+npm create svelte@latest
 
-``` bash
-cd path/to/tabby
-npm install
+# create a new project in my-app
+npm create svelte@latest my-app
 ```
 
-You can run the extension in your browser as a website by calling `npm run dev`.
+## Developing
 
-If you want to build the extension you can run `npm run build`.
-After that, the unpacked extension will be in the `dist/` directory, ready to be tested in your browser.
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-## Contribution and Commits
+```bash
+npm run dev
 
-### Language contributions
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
 
-If you want to help with translating tabby into more languages, follow these steps:
-1. Clone the repository
-2. Copy the [English language file](https://github.com/JulianWels/tabby/blob/master/src/locales/en.yaml).
-3. Rename the file to match the locale you are translating to (mind the note below).
-4. Translate the strings (If they don't start with a letter you have to wrap them in `"` quotes).
-5. Add the name of the language (in english) to the [English language file](/JulianWels/tabby/blob/master/src/locales/en.yaml).
-6. Make a pull request
+Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
 
-You can also [reach out](https://twitter.com/JulianWels) if you have trouble with that or questions.
+## Building
 
-**Note:** The Chrome Web Store has a list of accepted [locale strings](https://developer.chrome.com/webstore/i18n#localeTable). If the language you translated to matches one of these, please use the corresponding locale code.
+To build your library:
 
-### Code contributions
+```bash
+npm run package
+```
 
-Contributions such as pull requests, reporting bugs and suggesting enhancements are always welcome!
+To create a production version of your showcase app:
 
-We're using [gitmoji](https://gitmoji.carloscuesta.me/) for all commits.
+```bash
+npm run build
+```
 
-### Contributers
+You can preview the production build with `npm run preview`.
 
-| Name                                                 | Type                   | Info                   |
-| :--------------------------------------------------- | :--------------------: | :--------------------- |
-| <a href="//github.com/RodrigoSaint">RodrigoSaint</a> | :globe_with_meridians: | Portuguese translation |
+> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Publishing
+
+Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
+
+To publish your library to [npm](https://www.npmjs.com):
+
+```bash
+npm publish
+```

@@ -11,6 +11,9 @@ search-input:
 # (catpun) Text that appears if there are no search results
 search-no-result: keine Tabs gefunden
 
+# Label for button with which open tabs are managed
+search-tab-counter: '{n, plural, =0 {Tabs} one {Offenen tab} other {{n} offene tabs}} verwalten'
+
 # Onboarding text
 onboarding-headline: Danke, dass du tabby benutzt!
 onboarding-instructions: Tipp' irgendetwas in das Textfeld ein, um im aktuellen Fenster nach Tabs zu suchen.
@@ -30,7 +33,6 @@ source-code: Quellcode
 
 # (catpun) Headline of preferences-page
 preferences-header: Einstellungen
-
 
 # Shortcut settings (shortcut is not changeable from within the extension)
 preferences-shortcut-headline: Öffnen mit Tastenkombination
@@ -106,7 +108,6 @@ icon-face-themed: Gesicht (Farbe)
 # Link to localized documentation on how to change extension shortcuts.
 # Comment out if there is no localized version, so it can fall back to english.
 url-changing-shortcuts-firefox: https://support.mozilla.org/de/kb/tastenkombinationen-fur-erweiterungen-verwalten
-
 
 # These translations are for the manifest.json file
 manifest:
