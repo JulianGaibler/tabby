@@ -8,7 +8,13 @@ const LOCALES_PATH = 'src/locales/'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [pluginManifest(), availableLocales(), localeFiles(), yamlPlugin(), svelte()],
+  plugins: [
+    pluginManifest(),
+    availableLocales(),
+    localeFiles(),
+    yamlPlugin(),
+    svelte(),
+  ],
   define: {
     __VERSION__: JSON.stringify(process.env.npm_package_version),
   },
@@ -22,7 +28,7 @@ export default defineConfig({
     preprocessorOptions: {
       sass: {
         additionalData: (d) => {
-          const prepend = `@use "src/styles/utils.sass" as tint\n`
+          const prepend = `@use "@src/styles/utils.sass" as tint\n`
           const match = d.match(/^\s*/)
           const spaces = match ? match[0] : ''
           return `${spaces}${prepend}\n${d}`
@@ -48,7 +54,8 @@ export default defineConfig({
 
 /**
  * Copies the template manifest.json from src/, replaces the version number,
- * adds experimental mappings from the config file and then emits it into dist/.
+ * adds experimental mappings from the config file and then emits it into
+ * dist/.
  */
 function pluginManifest() {
   return {
@@ -73,9 +80,7 @@ function pluginManifest() {
   }
 }
 
-/**
- * Copies the manifest translations from src/locales/ into dist/_locales/.
- */
+/** Copies the manifest translations from src/locales/ into dist/_locales/. */
 function localeFiles() {
   return {
     name: 'copy-locale-files',
@@ -136,9 +141,10 @@ function availableLocales() {
       if (id !== resolvedVirtualModuleId) {
         return
       }
-      const locales = fs.readdirSync(LOCALES_PATH)
-      .filter((file) => file.endsWith('.yaml'))
-      .map((file) => file.replace('.yaml', ''))
+      const locales = fs
+        .readdirSync(LOCALES_PATH)
+        .filter((file) => file.endsWith('.yaml'))
+        .map((file) => file.replace('.yaml', ''))
 
       // return supportedLanguages -> locales
       return `export const availableLocales = ${JSON.stringify(

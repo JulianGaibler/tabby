@@ -2,22 +2,28 @@
   import { _ } from 'svelte-i18n'
   import iconDropdown from 'tint/icons/14-dropdown.svg?raw'
   import { onMount } from 'svelte'
-  import { createEventDispatcher } from 'svelte'
   import tabGroups from '@src/utils/group-store'
   import * as extAPI from '@src/utils/extension-api'
 
-  const dispatch = createEventDispatcher()
+  interface Props {
+    groupId: number
+    focus: [number, number]
+    claimFocus: boolean
+    nth: number
+    collapsed: boolean
+    onactionat?: (index: number) => void
+  }
 
-  export let groupId: number
-  export let focus: [number, number]
-  export let claimFocus: boolean
-  export let nth: number
-  export let collapsed: boolean
+  let {
+    groupId,
+    focus = $bindable(),
+    claimFocus,
+    nth,
+    collapsed,
+    onactionat = undefined,
+  }: Props = $props()
 
-  let buttonElement: HTMLButtonElement | null = null
-
-  $: focusElement(focus)
-  $: isFocused = focus[0] === nth
+  let buttonElement: HTMLButtonElement | null = $state(null)
 
   onMount(() => {
     focusElement(focus)
@@ -38,9 +44,14 @@
   }
 
   function toggleCollapsed() {
+    console.log('toggleCollapsed', groupId, collapsed)
     groupId && extAPI.updateGroup(groupId, { collapsed: !collapsed })
-    dispatch('action-at', nth)
+    onactionat?.(nth)
   }
+  $effect(() => {
+    focusElement(focus)
+  })
+  let isFocused = $derived(focus[0] === nth)
 </script>
 
 <div class={`group-title chromeGroupColor ${$tabGroups[groupId]?.color || ''}`}>
@@ -52,7 +63,7 @@
     tabindex={isFocused ? 0 : -1}
     aria-expanded={!collapsed}
     aria-controls={`group-${groupId}`}
-    on:click={toggleCollapsed}
+    onclick={toggleCollapsed}
     ><span class="icon">{@html iconDropdown}</span><span
       >{$tabGroups[groupId]?.title || 'Unnamed Group'}</span
     ></button

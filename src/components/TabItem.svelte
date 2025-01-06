@@ -10,44 +10,59 @@
   import { onMount } from 'svelte'
   import type { HighlightResult } from '@src/utils/fuse-highlight'
   import * as extAPI from '@src/utils/extension-api'
-  import { createEventDispatcher } from 'svelte'
   import tabGroups from '@src/utils/group-store'
   import containers from '@src/utils/container-store'
   import containerIcons from '@src/utils/container-icons'
-  import state from '@src/utils/state-store'
+  import stateStore from '@src/utils/state-store'
 
-  const dispatch = createEventDispatcher()
+  interface Props {
+    tab: HighlightResult<extAPI.CombinedTab>
+    nth: number
+    focus: [number, number]
+    claimFocus: boolean
+    onactionat?: (index: number) => void
+    onfocusset?: (index: number) => void
+    focusLeft?: () => void
+    focusRight?: () => void
+  }
 
-  export let tab: HighlightResult<extAPI.CombinedTab>
-  export let nth: number
-  export let focus: [number, number]
-  export let claimFocus: boolean
+  let {
+    tab,
+    nth,
+    focus = $bindable(),
+    claimFocus,
+    onactionat = undefined,
+    onfocusset = undefined,
+    focusLeft = $bindable(undefined),
+    focusRight = $bindable(undefined),
+  }: Props = $props()
 
-  let buttons: (HTMLButtonElement | undefined)[] = [
+  let buttons: (HTMLButtonElement | undefined)[] = $state([
     undefined,
     undefined,
     undefined,
     undefined,
-  ]
-
-  $: focusElement(focus)
+  ])
 
   onMount(() => {
     focusElement(focus)
   })
 
-  export const focusLeft = () => {
+  const focusLeftFn = () => {
     if (!claimFocus) {
       return
     } else if (document.dir == 'rtl') moveFocusRight()
     else moveFocusLeft()
   }
-  export const focusRight = () => {
+  const focusRightFn = () => {
     if (!claimFocus) {
       return
     } else if (document.dir == 'rtl') moveFocusLeft()
     else moveFocusRight()
   }
+
+  focusLeft = focusLeftFn
+  focusRight = focusRightFn
 
   function moveFocusLeft() {
     // find the next focusable element in buttons element.
@@ -109,22 +124,22 @@
 
   function openTab() {
     tab?.id && extAPI.openTab(tab.id)
-    dispatch('action-at', nth)
+    onactionat?.(nth)
   }
   function togglePinTab() {
     tab?.id && extAPI.updateTabs(tab.id, { pinned: !tab.pinned })
-    dispatch('action-at', nth)
+    onactionat?.(nth)
   }
   function toggleMuteTab() {
     tab?.id &&
       extAPI.updateTabs(tab.id, {
         muted: !tab.mutedInfo?.muted ? true : false,
       })
-    dispatch('action-at', nth)
+    onactionat?.(nth)
   }
   function closeTab() {
     tab?.id && extAPI.closeTab(tab.id)
-    dispatch('action-at', nth)
+    onactionat?.(nth)
   }
 
   function runIfEnter<T extends (...args: any[]) => any>(
@@ -137,12 +152,15 @@
       fn(...args)
     } else if (e.key === 'Home') {
       e.preventDefault()
-      dispatch('focus-set', 0)
+      onfocusset?.(0)
     } else if (e.key === 'End') {
       e.preventDefault()
-      dispatch('focus-set', 1)
+      onfocusset?.(1)
     }
   }
+  $effect(() => {
+    focusElement(focus)
+  })
 </script>
 
 <li
@@ -154,12 +172,12 @@
     class="tab-button"
     bind:this={buttons[0]}
     tabindex={isFocused(focus, 0) ? 0 : -1}
-    on:click={openTab}
-    on:keydown={(e) => runIfEnter(e, openTab)}
+    onclick={openTab}
+    onkeydown={(e) => runIfEnter(e, openTab)}
   >
     <div
       class="favicon"
-      class:grouped={$state.preferences?.showGroupTabs &&
+      class:grouped={$stateStore.preferences?.showGroupTabs &&
         tab.groupId &&
         tab.groupId !== -1}
     >
@@ -178,7 +196,7 @@
         {/if}
       </h1>
       <div class="sub">
-        {#if $state.preferences?.showContainerTabs && tab.cookieStoreId && tab.cookieStoreId !== 'firefox-default' && $containers[tab.cookieStoreId]}
+        {#if $stateStore.preferences?.showContainerTabs && tab.cookieStoreId && tab.cookieStoreId !== 'firefox-default' && $containers[tab.cookieStoreId]}
           <p
             class={`tint--type-ui-small-bold container firefoxContainer ${
               $containers[tab.cookieStoreId].color
@@ -205,8 +223,8 @@
       <Button
         bind:element={buttons[1]}
         icon={true}
-        on:click={toggleMuteTab}
-        on:keydown={(e) => runIfEnter(e, toggleMuteTab)}
+        onclick={toggleMuteTab}
+        onkeydown={(e) => runIfEnter(e, toggleMuteTab)}
         small={true}
         tabindex={isFocused(focus, 1) ? 0 : -1}
         title="Mute tab"
@@ -218,8 +236,8 @@
       <Button
         bind:element={buttons[2]}
         icon={true}
-        on:click={togglePinTab}
-        on:keydown={(e) => runIfEnter(e, togglePinTab)}
+        onclick={togglePinTab}
+        onkeydown={(e) => runIfEnter(e, togglePinTab)}
         small={true}
         tabindex={isFocused(focus, 2) ? 0 : -1}
         title="Pin tab"
@@ -230,8 +248,8 @@
     <Button
       bind:element={buttons[3]}
       icon={true}
-      on:click={closeTab}
-      on:keydown={(e) => runIfEnter(e, closeTab)}
+      onclick={closeTab}
+      onkeydown={(e) => runIfEnter(e, closeTab)}
       small={true}
       tabindex={isFocused(focus, 3) ? 0 : -1}
       title="Close tab"

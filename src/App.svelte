@@ -2,14 +2,14 @@
   import Preferences from '@src/Preferences.svelte'
   import Search from '@src/Search.svelte'
 
-  let showPreferences = false
+  let showPreferences = $state(false)
 </script>
 
 <div id="app" class="tint--type-ui tint--plain">
   {#if showPreferences}
-    <Preferences on:toggle-preferences={() => (showPreferences = false)} />
+    <Preferences ontogglepreferences={() => (showPreferences = false)} />
   {:else}
-    <Search on:toggle-preferences={() => (showPreferences = true)} />
+    <Search ontogglepreferences={() => (showPreferences = true)} />
   {/if}
 </div>
 

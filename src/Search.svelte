@@ -11,26 +11,37 @@
   import * as extAPI from '@src/utils/extension-api'
   import { findGroups, type IndexInfo } from './utils/tab-utils'
   import tabGroups from '@src/utils/group-store'
-  import state from '@src/utils/state-store'
+  import stateStore from '@src/utils/state-store'
   import GroupItem from './components/GroupItem.svelte'
   import { tabActions } from './utils/tab-actions'
-  import { createEventDispatcher } from 'svelte'
-
-  $: console.log('state', $state)
+  import { onMount, untrack } from 'svelte'
 
   const INDEX_OPTIONS = { keys: ['title', 'url'], includeMatches: true }
-  const dispatch = createEventDispatcher()
 
-  let searchString = ''
-  let fuse: Fuse<extAPI.CombinedTab> | null = null
+  interface Props {
+    ontogglepreferences?: () => void
+  }
 
-  let contextClick: ContextClickHandler | undefined = undefined
+  let { ontogglepreferences = undefined }: Props = $props()
 
-  let focus: [number, number] = [-1, 0]
-  let searchFieldFocus = true
-  let searchField: HTMLInputElement | null = null
-  let focusLeft: () => void
-  let focusRight: () => void
+  let searchString = $state('')
+  let fuse: Fuse<extAPI.CombinedTab> | null = $state(null)
+
+  let contextClick: ContextClickHandler | undefined = $state(undefined)
+
+  let focus: [number, number] = $state([-1, 0])
+  let searchFieldFocus = $state(true)
+  let searchField: HTMLInputElement | null = $state(null)
+  let focusLeft = $state<() => void | undefined>()
+  let focusRight = $state<() => void | undefined>()
+  let searchResults = $state<HighlightResult<extAPI.CombinedTab>[]>([])
+  let groupResults = $state<
+    ReturnType<typeof findGroups<HighlightResult<extAPI.CombinedTab>>>
+  >({
+    groupIndices: [],
+    totalIndices: 0,
+    activeTabIndex: 0,
+  })
 
   function updateFuseInstance(tabs: extAPI.CombinedTab[]) {
     const index = Fuse.createIndex(INDEX_OPTIONS.keys, tabs)
@@ -78,21 +89,34 @@
     }
   }
 
-  $: console.log('$state.preferences?.showOverview', $state.preferences?.showOverview)
+  $effect(() => {
+    updateFuseInstance($tabs)
+    // stringify and parse fuse and log it
+    if (
+      searchString === undefined ||
+      $tabs === undefined ||
+      fuse === null ||
+      $stateStore.preferences === undefined ||
+      $tabGroups === undefined
+    )
+      return
 
-  $: updateFuseInstance($tabs)
-  $: searchResults = searchTabs(
-    $tabs,
-    searchString,
-    fuse,
-    $state.preferences?.showOverview || false,
-  )
-  $: groupResults = findGroups(
-    searchResults,
-    $tabGroups,
-    searchString.trim().length > 0 || !$state.preferences?.showGroupTabs,
-  )
-  $: onUpdateListItems(groupResults.groupIndices)
+    untrack(async () => {
+      searchResults = searchTabs(
+        $tabs,
+        searchString,
+        fuse,
+        $stateStore.preferences?.showOverview || false,
+      )
+      groupResults = findGroups(
+        searchResults,
+        $tabGroups,
+        searchString.trim().length > 0 ||
+          !$stateStore.preferences?.showGroupTabs,
+      )
+      onUpdateListItems(groupResults.groupIndices)
+    })
+  })
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'ArrowDown') {
@@ -106,11 +130,11 @@
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault()
       searchFieldFocus = false
-      focusLeft()
+      focusLeft?.()
     } else if (e.key === 'ArrowRight') {
       e.preventDefault()
       searchFieldFocus = false
-      focusRight()
+      focusRight?.()
     } else if (
       e.key.length === 1 &&
       !e.ctrlKey &&
@@ -141,21 +165,24 @@
     focus = [newFocus, focus[1]]
   }
 
-  function handleFocusChange(e: CustomEvent<number>) {
-    if (e.detail === undefined || e.detail === -1) {
+  function handleFocusChange(index: number) {
+    if (index === undefined || index === -1) {
       changeFocus(0)
     } else {
-      focus = [e.detail, 0]
+      focus = [index, 0]
       changeFocus(0)
     }
   }
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window onkeydown={handleKeydown} />
 
 <header class="tint--tinted">
-  <Button icon={true} variant="ghost" title={$_('preferences-button')} on:click={() => dispatch('toggle-preferences')}
-    >{@html TabbyIcon}</Button
+  <Button
+    icon={true}
+    variant="ghost"
+    title={$_('preferences-button')}
+    onclick={ontogglepreferences}>{@html TabbyIcon}</Button
   >
   <input
     type="search"
@@ -165,14 +192,14 @@
     class="tint--type-body-sans"
     bind:value={searchString}
     bind:this={searchField}
-    on:focus={() => (searchFieldFocus = true)}
-    on:blur={() => (searchFieldFocus = false)}
-    on:keydown={handleInputKeydown}
+    onfocus={() => (searchFieldFocus = true)}
+    onblur={() => (searchFieldFocus = false)}
+    onkeydown={handleInputKeydown}
   />
   <button
     class="tabs"
-    on:click={contextClick}
-    on:mousedown={contextClick}
+    onclick={contextClick}
+    onmousedown={contextClick}
     title={$_('search-tab-counter', { values: { n: 12 } })}
   >
     <span>{$tabs.length}</span>
@@ -187,7 +214,7 @@
       <GroupItem
         groupId={item.groupId}
         bind:focus
-        on:action-at={handleFocusChange}
+        onactionat={handleFocusChange}
         claimFocus={!searchFieldFocus}
         nth={item.focusIndex}
         collapsed={item.collapsed}
@@ -201,12 +228,12 @@
             bind:focus
             bind:focusLeft
             bind:focusRight
-            on:action-at={handleFocusChange}
-            on:focus-set={(e) => {
-              if (e.detail === 0) {
+            onactionat={handleFocusChange}
+            onfocusset={(index) => {
+              if (index === 0) {
                 focus = [0, 0]
                 changeFocus(0)
-              } else if (e.detail === 1) {
+              } else if (index === 1) {
                 focus = [searchResults.length - 1, 0]
                 changeFocus(0)
               }

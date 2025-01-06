@@ -1,10 +1,10 @@
 <script lang="ts">
+  import stateStore from '@src/utils/state-store'
   import { _ } from 'svelte-i18n'
   import Toggleable from 'tint/components/Toggleable.svelte'
-  import state from '@src/utils/state-store'
 
-  function handleChange(event: CustomEvent<boolean>) {
-    state.setPreferences('showOverview', event.detail)
+  function handleChange(s: boolean) {
+    stateStore.setPreferences('showOverview', s)
   }
 </script>
 
@@ -14,8 +14,8 @@
 </div>
 <div class="controls end">
   <Toggleable
-    checked={!!$state.preferences?.showOverview}
-    on:change={handleChange}
+    checked={!!$stateStore.preferences?.showOverview}
+    onchange={handleChange}
     ariaDescribedby="overview-description"
     id="input"
     type="switch"

@@ -1,9 +1,8 @@
 <script lang="ts">
+  import stateStore from '@src/utils/state-store'
   import { _ } from 'svelte-i18n'
-  import Toggleable from 'tint/components/Toggleable.svelte'
-  import state from '@src/utils/state-store'
   import Button from 'tint/components/Button.svelte'
-
+  import Toggleable from 'tint/components/Toggleable.svelte'
 </script>
 
 <div>

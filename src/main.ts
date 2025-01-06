@@ -1,11 +1,12 @@
+import { listenToThemeChange } from './utils/state-store'
 import App from '@src/App.svelte'
 import '@src/styles/global.sass'
 import '@src/utils/localization'
-import { listenToThemeChange } from './utils/state-store'
+import { mount } from 'svelte'
 
 listenToThemeChange()
 
-const app = new App({
+const app = mount(App, {
   target: document.body,
 })
 

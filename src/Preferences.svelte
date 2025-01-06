@@ -2,8 +2,11 @@
   import { _ } from 'svelte-i18n'
   import Button from 'tint/components/Button.svelte'
   import BackIcon from 'tint/icons/20-chevron-left.svg?raw'
-  import { createEventDispatcher } from 'svelte'
-  import { hasContainerSupport, hasTabGroupSupport, shortcutGet } from '@src/utils/extension-api'
+  import {
+    hasContainerSupport,
+    hasTabGroupSupport,
+    shortcutGet,
+  } from '@src/utils/extension-api'
   import Shortcut from '@src/components/preferences/Shortcut.svelte'
   import Language from '@src/components/preferences/Language.svelte'
   import ShowTabGroups from '@src/components/preferences/ShowTabGroups.svelte'
@@ -12,8 +15,13 @@
   import ShowOverview from '@src/components/preferences/ShowOverview.svelte'
   import GLogo from '@src/assets/g-logo.svg?raw'
   import ShareAndSupport from './components/preferences/ShareAndSupport.svelte'
-  const dispatch = createEventDispatcher()
   const VERSION = __VERSION__
+
+  interface Props {
+    ontogglepreferences?: () => void
+  }
+
+  let { ontogglepreferences = undefined }: Props = $props()
 
   let shortcut = ''
   shortcutGet('_execute_browser_action').then((result) => {
@@ -26,7 +34,7 @@
     icon={true}
     variant="ghost"
     title={$_('back-button')}
-    on:click={() => dispatch('toggle-preferences')}>{@html BackIcon}</Button
+    onclick={() => ontogglepreferences?.()}>{@html BackIcon}</Button
   >
   <h1 class="tint--type-body-sans">{$_('preferences-header')}</h1>
 </header>
@@ -38,14 +46,21 @@
     <Theme />
     <ShowOverview />
     {#if hasTabGroupSupport}
-    <ShowTabGroups />
+      <ShowTabGroups />
     {/if}
     {#if hasContainerSupport}
-    <ShowTabContainers />
+      <ShowTabContainers />
     {/if}
     <ShareAndSupport />
   </div>
-  <p class="credits">Made by <a href="https://jwels.berlin/" title="Julian Gaibler" target="_blank" rel="noopener">{@html GLogo}</a> in Berlin</p>
+  <p class="credits">
+    Made by <a
+      href="https://jwels.berlin/"
+      title="Julian Gaibler"
+      target="_blank"
+      rel="noopener">{@html GLogo}</a
+    > in Berlin
+  </p>
 </main>
 
 <footer class="infobar tint--tinted tint--type-ui-small">

@@ -6,21 +6,21 @@ import {
   type CombinedTab,
   queryTabGroups,
 } from './extension-api'
-import state from '@src/utils/state-store'
+import stateStore from '@src/utils/state-store'
 import { MENU_SEPARATOR, type MenuItem } from 'tint/components/Menu.svelte'
 
 const GROUP_CREATION_THRESHOLD = 3
 
 function actionGuard(fn: () => Promise<void>) {
   return () => {
-    state.startAction()
+    stateStore.startAction()
     fn()
       .catch((err) => {
         console.error(err)
         const message = `${err.message}\n\n${err.stack}`
-        state.endAction(message)
+        stateStore.endAction(message)
       })
-      .finally(() => state.endAction())
+      .finally(() => stateStore.endAction())
   }
 }
 
@@ -60,7 +60,8 @@ const allActions: (MenuItem | boolean)[] = [
         if (a.cookieStoreId === 'firefox-default') return -1
         if (b.cookieStoreId === 'firefox-default') return 1
         return a.cookieStoreId! > b.cookieStoreId! ? 1 : -1
-      })),
+      }),
+    ),
   },
   hasTabGroupSupport && MENU_SEPARATOR,
   hasTabGroupSupport && {
@@ -70,7 +71,8 @@ const allActions: (MenuItem | boolean)[] = [
         if (tab.url === undefined) return ''
         const hostname = new URL(tab.url).hostname
         return hostname.replace(/^www\d?\./, '')
-      })),
+      }),
+    ),
   },
 ]
 
@@ -96,31 +98,53 @@ async function sortTabByProperty(
   sortFn?: (a: CombinedTab, b: CombinedTab) => number,
 ) {
   const tabs = await queryTabs({ currentWindow: true })
-  tabs.sort((a, b) => {
-    // pinned tabs do not get sorted and stay in the current order
-    if (a.pinned && b.pinned) return 0
-    if (a.pinned) return -1
-    if (b.pinned) return 1
-    // if the property is not defined, it stays in the current order
-    if (a[property] === undefined || b[property] === undefined) {
-      return 0
-    }
-    // if a sort function is provided, use it
-    if (sortFn) return sortFn(a, b)
-    // otherwise, sort by the property
-    return a[property]! > b[property]! ? 1 : -1
-  })
-  if (property === 'lastAccessed') console.log(tabs)
+  const groups = tabs.reduce(
+    (acc, tab) => {
+      const groupId = tab.groupId ?? -1
+      if (!acc[groupId]) acc[groupId] = []
+      acc[groupId].push(tab)
+      return acc
+    },
+    {} as Record<number, CombinedTab[]>,
+  )
+
+  for (const groupTabs of Object.values(groups)) {
+    groupTabs.sort((a, b) => {
+      // pinned tabs do not get sorted and stay in the current order
+      if (a.pinned && b.pinned) return 0
+      if (a.pinned) return -1
+      if (b.pinned) return 1
+      // if the property is not defined, it stays in the current order
+      if (a[property] === undefined || b[property] === undefined) {
+        return 0
+      }
+      // if a sort function is provided, use it
+      if (sortFn) return sortFn(a, b)
+      // otherwise, sort by the property
+      return a[property]! > b[property]! ? 1 : -1
+    })
+  }
+
+  const sortedTabs = Object.values(groups).flat()
+  if (property === 'lastAccessed') console.log(sortedTabs)
   await thisBrowser?.tabs.move(
-    tabs.map((tab) => tab.id!),
+    sortedTabs.map((tab) => tab.id!),
     { index: 0 },
   )
+  // tabgroups might get lost, so we need to re-group them
+  for (const [groupId, groupTabs] of Object.entries(groups)) {
+    if (groupId === '-1') continue
+    await thisBrowser?.tabs.group({
+      tabIds: groupTabs.map((tab) => tab.id!),
+      groupId: parseInt(groupId),
+    })
+  }
 }
 
 async function groupTabsBy(groupFn: (tab: CombinedTab) => string) {
   const windowId = chrome.windows.WINDOW_ID_CURRENT
   const tabs = (await queryTabs({ windowId })).filter(
-    (tab) => !tab.pinned && !tab.hidden,
+    (tab) => !tab.pinned && !tab.hidden && tab.groupId === -1,
   )
   const groups = tabs.reduce(
     (acc, tab) => {

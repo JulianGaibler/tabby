@@ -6,7 +6,8 @@ export const thisBrowser: CombinedBrowserAPI | undefined =
     ? (window as any).chrome
     : undefined
 
-export const hasTabGroupSupport = !thisBrowser || window?.chrome?.tabGroups !== undefined
+export const hasTabGroupSupport =
+  !thisBrowser || window?.chrome?.tabGroups !== undefined
 
 export const hasContainerSupport =
   !thisBrowser || window?.browser?.contextualIdentities !== undefined
@@ -90,10 +91,7 @@ export async function storageGet(key: string) {
   return res[key]
 }
 
-export function storageSet(
-  key: string,
-  value: any,
-) {
+export function storageSet(key: string, value: any) {
   if (!thisBrowser) {
     return Promise.resolve(lsSet(key, value))
   }
