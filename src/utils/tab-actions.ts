@@ -26,35 +26,50 @@ function actionGuard(fn: () => Promise<void>) {
 
 const allActions: (MenuItem | boolean)[] = [
   {
-    label: 'Close duplicate tabs',
+    label: 'close-duplicate-tabs',
     onClick: actionGuard(closeDuplicateTabs),
   },
   hasContainerSupport && {
-    label: 'Close tabs older than...',
+    label: 'close-older-than.label',
     items: [
-      { label: '1 hour', onClick: () => closeOlderThan(60) },
-      { label: '4 hours', onClick: () => closeOlderThan(4 * 60) },
-      { label: '8 hours', onClick: () => closeOlderThan(8 * 60) },
-      { label: '1 day', onClick: () => closeOlderThan(24 * 60) },
-      { label: '1 week', onClick: () => closeOlderThan(7 * 24 * 60) },
-      { label: '1 month', onClick: () => closeOlderThan(30 * 24 * 60) },
+      { label: 'close-older-than.1hour', onClick: () => closeOlderThan(60) },
+      {
+        label: 'close-older-than.4hours',
+        onClick: () => closeOlderThan(4 * 60),
+      },
+      {
+        label: 'close-older-than.8hours',
+        onClick: () => closeOlderThan(8 * 60),
+      },
+      {
+        label: 'close-older-than.1day',
+        onClick: () => closeOlderThan(24 * 60),
+      },
+      {
+        label: 'close-older-than.1week',
+        onClick: () => closeOlderThan(7 * 24 * 60),
+      },
+      {
+        label: 'close-older-than.1month',
+        onClick: () => closeOlderThan(30 * 24 * 60),
+      },
     ],
   },
   MENU_SEPARATOR,
   {
-    label: 'Sort tabs by title',
+    label: 'sort-tabs-by-title',
     onClick: actionGuard(() => sortTabByProperty('title')),
   },
   {
-    label: 'Sort tabs by URL',
+    label: 'sort-tabs-by-url',
     onClick: actionGuard(() => sortTabByProperty('url')),
   },
   hasContainerSupport && {
-    label: 'Sort tabs by last accessed',
+    label: 'sort-tabs-by-last-accessed',
     onClick: actionGuard(() => sortTabByProperty('lastAccessed')),
   },
   hasContainerSupport && {
-    label: 'Sort tabs by container',
+    label: 'sort-tabs-by-container',
     onClick: actionGuard(() =>
       sortTabByProperty('cookieStoreId', (a, b) => {
         if (a.cookieStoreId === 'firefox-default') return -1
@@ -65,7 +80,7 @@ const allActions: (MenuItem | boolean)[] = [
   },
   hasTabGroupSupport && MENU_SEPARATOR,
   hasTabGroupSupport && {
-    label: 'Group tabs by domain',
+    label: 'group-tabs-by-domain',
     onClick: actionGuard(() =>
       groupTabsBy((tab) => {
         if (tab.url === undefined) return ''
@@ -126,7 +141,6 @@ async function sortTabByProperty(
   }
 
   const sortedTabs = Object.values(groups).flat()
-  if (property === 'lastAccessed') console.log(sortedTabs)
   await thisBrowser?.tabs.move(
     sortedTabs.map((tab) => tab.id!),
     { index: 0 },
@@ -157,15 +171,11 @@ async function groupTabsBy(groupFn: (tab: CombinedTab) => string) {
   )
   const groupArray = Object.entries(groups)
 
-  console.log(groupArray)
-
   // filter tabs where GROUP_CREATION_THRESHOLD is not met
   const filteredGroupArray = groupArray
     .filter(([, tabs]) => tabs.length >= GROUP_CREATION_THRESHOLD)
     // and filter tabs where the name is an empty string
     .filter(([name]) => name !== '')
-
-  console.log(filteredGroupArray)
 
   for (const [name, tabs] of filteredGroupArray) {
     const queryResult = await queryTabGroups({ windowId, title: name })

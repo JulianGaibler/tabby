@@ -13,7 +13,6 @@ const containers = readable({} as ContainerMap, (set, update) => {
   const updateTabs = () => {
     queryContainers({}).then((containers) => {
       if (!containers) return
-      console.log('containers', containers)
       set(
         containers.reduce((acc, container) => {
           acc[container.cookieStoreId] = container

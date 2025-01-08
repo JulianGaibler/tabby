@@ -12,12 +12,7 @@ search-input:
 search-tab-counter: 'Manage {n, plural, =0 {tabs} one {open tab} other {{n} open tabs}}'
 
 # (catpun) Text that appears if there are no search results
-search-no-result: didn’t find any tabs
-
-# Onboarding text
-onboarding-headline: Thanks for using tabby!
-onboarding-instructions: Type anything into the text-field to search for tabs in the current window.
-onboarding-about-settings: Also, you can click on the tabby icon next to the search field for more settings!
+search-no-result: Didn’t find any tabs
 
 # Navigation buttons
 preferences-button: Preferences
@@ -29,6 +24,22 @@ unpin-tab-button: unpin tab
 close-tab-button: close tab
 mute-tab-button: mute tab
 unmute-tab-button: unmute tab
+
+# Tab management
+close-duplicate-tabs: Close duplicate tabs
+close-older-than:
+  label: Close tabs older than...
+  1hour: 1 hour
+  4hours: 4 hours
+  8hours: 8 hours
+  1day: 1 day
+  1week: 1 week
+  1month: 1 month
+sort-tabs-by-title: Sort tabs by title
+sort-tabs-by-url: Sort tabs by URL
+sort-tabs-by-last-accessed: Sort tabs by last accessed
+sort-tabs-by-container: Sort tabs by container
+group-tabs-by-domain: Group tabs by domain
 
 # Links to source code
 source-code: Source Code
@@ -56,14 +67,6 @@ preferences-language-contribute:
 preferences-theme-headline: Theme
 preferences-theme-explanation: "'Auto' selects the theme based on the systems theme."
 
-# Accent color settings
-preferences-accent-color-headline: Accent Color
-preferences-accent-color-explanation: The color for buttons and other UI controls.
-
-# Icon settings
-preferences-icon-headline: Icon
-preferences-icon-explanation: Sets the icon for the browser button.
-
 # Overview settings
 preferences-show-overview-headline: Show tab overview
 preferences-show-overview-explanation: Show all open tabs when you open tabby
@@ -78,20 +81,21 @@ preferences-show-tab-containers-explanation: Show which container a tab is in
 
 # Asking for Recommendation
 preferences-recommend-headline: Do you like tabby?
-preferences-recommend-review: Share it with your friends or review it!
-# url will be inserted into message where {0} is.
-# url is a link to a twitter account
-preferences-recommend-feedback:
-  message: 'You can also {0}.'
-  url: give me feedback on Twitter
+preferences-recommend-explanation: Share it with your friends or review it!
+preferences-recommend-action: Rate extension
+
+# Support
+preferences-support-headline: Having issues?
+preferences-support-explanation: If you are having issues (including accessibility issues) or feature suggestions
+preferences-support-action: Support page
 
 # Languages
 # Remove all languages except the one being translated and system, so it can fall back to english.
 language-system: System
 language-name-en: English
 language-name-de: German
-language-name-pt_BR: Portuguese (Brazil)
-language-name-pt_PT: Portuguese (Portugal)
+language-name-pt-BR: Portuguese (Brazil)
+language-name-pt-PT: Portuguese (Portugal)
 
 # Themes
 theme-system: Auto
@@ -106,13 +110,7 @@ accent-color-red: Red
 accent-color-orange: Orange
 accent-color-yellow: Yellow
 accent-color-green: Green
-accent-color-grey: Grey
-
-# Icons
-icon-default: Eye (default)
-icon-eye-themed: Eye (color)
-icon-face: Face
-icon-face-themed: Face (color)
+accent-color-grey: Gray
 
 # Link to localized documentation on how to change extension shortcuts.
 # Comment out if there is no localized version, so it can fall back to english.

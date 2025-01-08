@@ -131,7 +131,7 @@ function availableLocales() {
   const resolvedVirtualModuleId = '\0' + virtualModuleId
 
   return {
-    name: 'typography-importer', // required, will show up in warnings and errors
+    name: 'locale-importer', // required, will show up in warnings and errors
     resolveId(id) {
       if (id === virtualModuleId) {
         return resolvedVirtualModuleId

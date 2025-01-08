@@ -18,6 +18,9 @@ export async function queryTabGroups(
   if (!thisBrowser) {
     return GROUPS as chrome.tabGroups.TabGroup[]
   }
+  if (!thisBrowser.tabGroups) {
+    return []
+  }
   return await thisBrowser.tabGroups.query(options)
 }
 

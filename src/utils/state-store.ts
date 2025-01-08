@@ -1,10 +1,6 @@
-import {
-  thisBrowser,
-  storageGet,
-  storageSet,
-  storageRemove,
-} from './extension-api'
+import { thisBrowser, storageGet, storageSet } from './extension-api'
 import { writable } from 'svelte/store'
+import { locale } from 'svelte-i18n'
 
 export const PREFS_KEY = 'tabby_preferences'
 const CURRENT_VERSION = __VERSION__
@@ -27,7 +23,7 @@ interface TabbyState {
 const defaultPreferences: Preferences = {
   theme: 'system',
   showOverview: true,
-  lastVersion: '',
+  lastVersion: CURRENT_VERSION,
   showGroupTabs: true,
   showContainerTabs: true,
   locale: 'system',
@@ -48,6 +44,7 @@ function state() {
           ...defaultState,
           preferences,
         })
+        updateLocale(preferences.locale)
         thisBrowser?.storage?.onChanged.addListener(updateStorage)
       })
 
@@ -151,7 +148,6 @@ export async function listenToThemeChange() {
 
   const preferences = (await storageGet(PREFS_KEY)) as Preferences | undefined
   if (preferences) {
-    console.log('theme', preferences)
     updateTheme(preferences.theme)
   }
   thisBrowser?.storage.onChanged.addListener((changes, areaName) => {
@@ -160,4 +156,8 @@ export async function listenToThemeChange() {
       updateTheme(changes[PREFS_KEY].newValue.theme)
     }
   })
+}
+function updateLocale(l: string) {
+  if (!l || l === 'system') return
+  locale.set(l)
 }

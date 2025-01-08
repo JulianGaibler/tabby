@@ -65,7 +65,11 @@
 
 <footer class="infobar tint--tinted tint--type-ui-small">
   <p>tabby {VERSION}</p>
-  <p>Source Code</p>
+  <a
+    href="https://github.com/JulianGaibler/tabby"
+    target="_blank"
+    rel="noopener">{$_('source-code')}</a
+  >
 </footer>
 
 <style lang="sass">
@@ -87,7 +91,7 @@
 
   footer
     color: var(--tint-text-secondary)
-    > p:last-child
+    > a
       text-align: end
 
   .credits

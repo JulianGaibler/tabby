@@ -227,7 +227,7 @@
         onkeydown={(e) => runIfEnter(e, toggleMuteTab)}
         small={true}
         tabindex={isFocused(focus, 1) ? 0 : -1}
-        title="Mute tab"
+        title={$_('mute-tab-button')}
         variant="ghost"
         >{@html tab.mutedInfo?.muted ? iconAudio : iconAudioOff}</Button
       >
@@ -240,7 +240,7 @@
         onkeydown={(e) => runIfEnter(e, togglePinTab)}
         small={true}
         tabindex={isFocused(focus, 2) ? 0 : -1}
-        title="Pin tab"
+        title={$_('pin-tab-button')}
         toggled={tab.pinned}
         variant="ghost">{@html tab.pinned ? iconPinFill : iconPin}</Button
       >
@@ -252,7 +252,7 @@
       onkeydown={(e) => runIfEnter(e, closeTab)}
       small={true}
       tabindex={isFocused(focus, 3) ? 0 : -1}
-      title="Close tab"
+      title={$_('close-tab-button')}
       variant="ghost"
       >{@html iconClose}
     </Button>

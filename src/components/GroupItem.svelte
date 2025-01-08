@@ -44,7 +44,6 @@
   }
 
   function toggleCollapsed() {
-    console.log('toggleCollapsed', groupId, collapsed)
     groupId && extAPI.updateGroup(groupId, { collapsed: !collapsed })
     onactionat?.(nth)
   }

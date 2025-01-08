@@ -20,7 +20,7 @@
   <TextField
     id="input"
     label={$_('preferences-shortcut-headline')}
-    value={shortcut}
+    value={shortcut || '-/-'}
     disabled
   />
 </div>

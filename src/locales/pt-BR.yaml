@@ -1,0 +1,123 @@
+# Brazilian Portuguese translation for tabby
+# Fields marked with (catpun) can have a subtle cat-based pun if paw-sible. Don't force it though!
+
+# This is for the main search input.
+# placeholder: (catpun) Grey text that appears when the input is empty.
+# aria-label: label for screen readers
+search-input:
+  placeholder: Procurrre suas abas...
+  aria-label: Procurar suas abas
+
+# Label for button with which open tabs are managed
+search-tab-counter: 'Gerenciar {n, plural, =0 {abas} one {a guia aberta} other {{n} guias abertas}}'
+
+# (catpun) Text that appears if there are no search results
+search-no-result: Não encontramos nenhuma aba
+
+# Navigation buttons
+preferences-button: Preferências
+back-button: Voltar
+
+# Other buttons
+pin-tab-button: fixar aba
+unpin-tab-button: desafixar aba
+close-tab-button: fechar aba
+mute-tab-button: silenciar aba
+unmute-tab-button: ativar som da aba
+
+# Tab management
+close-duplicate-tabs: Fechar abas duplicadas
+close-older-than:
+  label: Fechar abas mais antigas que...
+  1hour: 1 hora
+  4hours: 4 horas
+  8hours: 8 horas
+  1day: 1 dia
+  1week: 1 semana
+  1month: 1 mês
+sort-tabs-by-title: Ordenar abas por título
+sort-tabs-by-url: Ordenar abas por URL
+sort-tabs-by-last-accessed: Ordenar abas por último acesso
+sort-tabs-by-container: Ordenar abas por contêiner
+group-tabs-by-domain: Agrupar abas por domínio
+
+# Links to source code
+source-code: Código-fonte
+
+# (catpun) Headline of preferences-page
+preferences-header: Preferências
+
+# Shortcut settings (shortcut is not changeable from within the extension)
+preferences-shortcut-headline: Atalho de teclado
+# url will be inserted into message where {0} is.
+# url is a link to an external documentation (see url-changing-shortcuts-*)
+preferences-shortcut-explanation:
+  message: 'Você pode mudar o atalho {0}.'
+  url: na sua configuração do browser
+
+# Language settings
+preferences-language-headline: Idioma
+# url will be inserted into message where {0} is.
+# url is a link to the git repository
+preferences-language-contribute:
+  message: '{0} o tabby em mais idiomas.'
+  url: Ajude a traduzir
+
+# Theme settings
+preferences-theme-headline: Tema
+preferences-theme-explanation: "'Automático' usa o tema com base no seu sistema operacional."
+
+# Overview settings
+preferences-show-overview-headline: Mostrar visão geral das abas
+preferences-show-overview-explanation: Exibe todas as abas abertas ao abrir o tabby
+
+# Tab groups settings
+preferences-show-tab-groups-headline: Mostrar grupos de abas
+preferences-show-tab-groups-explanation: Mostra a qual grupo uma aba pertence
+
+# Container tabs settings
+preferences-show-tab-containers-headline: Mostrar abas de contêiner
+preferences-show-tab-containers-explanation: Mostra a qual contêiner uma aba pertence
+
+# Asking for Recommendation
+preferences-recommend-headline: Gostou do tabby?
+preferences-recommend-explanation: Compartilhe com seus amigos ou avalie!
+preferences-recommend-action: Avaliar extensão
+
+# Support
+preferences-support-headline: Está com problemas?
+preferences-support-explanation: Se você está enfrentando problemas (incluindo questões de acessibilidade) ou tem sugestões de melhorias
+preferences-support-action: Página de suporte
+
+# Languages
+language-system: Sistema
+language-name-pt-BR: Português (Brasil)
+
+# Themes
+theme-system: Automático
+theme-light: Claro
+theme-dark: Escuro
+
+# Accent Colors
+accent-color-blue: Azul
+accent-color-purple: Roxo
+accent-color-pink: Rosa
+accent-color-red: Vermelho
+accent-color-orange: Laranja
+accent-color-yellow: Amarelo
+accent-color-green: Verde
+accent-color-grey: Cinza
+
+# Link to localized documentation on how to change extension shortcuts.
+# Comment out if there is no localized version, so it can fall back to English.
+url-changing-shortcuts-firefox: https://support.mozilla.org/pt-BR/kb/gerencie-atalhos-de-extensoes-no-firefox
+# url-changing-shortcuts-chrome:
+
+# These translations are for the manifest.json file
+manifest:
+  # Name of the extension
+  name: tabby - troca rápida de abas
+  # Short description of the extension
+  description: Extensão para pesquisar e trocar em abas em segundos com um simples atalho
+  # Description of shortcut to open tabby
+  shortcutOpen: Abrir o tabby

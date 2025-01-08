@@ -1,8 +1,12 @@
 <script lang="ts">
   import { _ } from 'svelte-i18n'
   import Button from 'tint/components/Button.svelte'
-  import Menu, { type ContextClickHandler } from 'tint/components/Menu.svelte'
+  import Menu, {
+    type ContextClickHandler,
+    type MenuItem,
+  } from 'tint/components/Menu.svelte'
   import TabbyIcon from '@src/assets/tabby-icon.svg?raw'
+  import TabbyNoResult from '@src/assets/cat_noresults.svg?raw'
   import iconDropdown from 'tint/icons/14-dropdown.svg?raw'
   import TabItem from '@src/components/TabItem.svelte'
   import tabs from '@src/utils/tab-store'
@@ -118,6 +122,30 @@
     })
   })
 
+  let localizedTabActions = $derived.by<MenuItem[]>(() => {
+    return tabActions.map((item) => {
+      if (typeof item === 'object' && 'label' in item) {
+        const obj: any = {
+          ...item,
+          label: $_(item.label),
+        }
+        if ('items' in item) {
+          obj.items = item.items.map((subItem) => {
+            if (typeof subItem === 'object' && 'label' in subItem) {
+              return {
+                ...subItem,
+                label: $_(subItem.label),
+              }
+            }
+            return subItem
+          })
+        }
+        return obj
+      }
+      return item
+    })
+  })
+
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
@@ -205,46 +233,54 @@
     <span>{$tabs.length}</span>
     {@html iconDropdown}
   </button>
-  <Menu variant="button" items={tabActions} bind:contextClick />
+  <Menu variant="button" items={localizedTabActions} bind:contextClick />
 </header>
 
-<div class="main-area" tabindex="-1">
-  {#each groupResults.groupIndices as item}
-    {#if item.type === 'group'}
-      <GroupItem
-        groupId={item.groupId}
-        bind:focus
-        onactionat={handleFocusChange}
-        claimFocus={!searchFieldFocus}
-        nth={item.focusIndex}
-        collapsed={item.collapsed}
-      />
-    {:else if item.type === 'tabs'}
-      <ul id={`group-${item.groupId || ''}`}>
-        {#each item.items as tabInfo}
-          <TabItem
-            tab={searchResults[tabInfo.tabIndex]}
-            nth={tabInfo.focusIndex}
-            bind:focus
-            bind:focusLeft
-            bind:focusRight
-            onactionat={handleFocusChange}
-            onfocusset={(index) => {
-              if (index === 0) {
-                focus = [0, 0]
-                changeFocus(0)
-              } else if (index === 1) {
-                focus = [searchResults.length - 1, 0]
-                changeFocus(0)
-              }
-            }}
-            claimFocus={!searchFieldFocus}
-          />
-        {/each}
-      </ul>
-    {/if}
-  {/each}
-</div>
+<!-- if search term and no results -->
+{#if searchString.trim().length > 0 && searchResults.length === 0}
+  <div class="no-result tint--tinted">
+    {@html TabbyNoResult}
+    <h2 class="tint--type-title-sans-3">{$_('search-no-result')}</h2>
+  </div>
+{:else}
+  <div class="main-area" tabindex="-1">
+    {#each groupResults.groupIndices as item}
+      {#if item.type === 'group'}
+        <GroupItem
+          groupId={item.groupId}
+          bind:focus
+          onactionat={handleFocusChange}
+          claimFocus={!searchFieldFocus}
+          nth={item.focusIndex}
+          collapsed={item.collapsed}
+        />
+      {:else if item.type === 'tabs'}
+        <ul id={`group-${item.groupId || ''}`}>
+          {#each item.items as tabInfo}
+            <TabItem
+              tab={searchResults[tabInfo.tabIndex]}
+              nth={tabInfo.focusIndex}
+              bind:focus
+              bind:focusLeft
+              bind:focusRight
+              onactionat={handleFocusChange}
+              onfocusset={(index) => {
+                if (index === 0) {
+                  focus = [0, 0]
+                  changeFocus(0)
+                } else if (index === 1) {
+                  focus = [searchResults.length - 1, 0]
+                  changeFocus(0)
+                }
+              }}
+              claimFocus={!searchFieldFocus}
+            />
+          {/each}
+        </ul>
+      {/if}
+    {/each}
+  </div>
+{/if}
 
 <style lang="sass">
   input
@@ -278,9 +314,16 @@
       width: 8px
       height: 8px
 
-  .main-area, ul
+  .main-area, ul, .no-result
     display: flex
     flex-direction: column
   ul
     list-style: none
+
+  .no-result
+    justify-content: center
+    align-items: center
+    height: 100%
+    flex-grow: 1
+    gap: tint.$size-16
 </style>
