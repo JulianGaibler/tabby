@@ -1,7 +1,7 @@
 {
   "name": "tabby",
   "type": "module",
-  "version": "0.0.1",
+  "version": "2.0.0",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && npm run package",
@@ -21,7 +21,8 @@
     "he": "^1.2.0",
     "semver": "^7.6.3",
     "svelte-i18n": "^4.0.1",
-    "tint": "git://github.com/JulianGaibler/tint.git#main"
+    "tint": "git://github.com/JulianGaibler/tint.git#main",
+    "web-ext": "^8.3.0"
   },
   "devDependencies": {
     "@sveltejs/package": "^2.3.7",

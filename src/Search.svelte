@@ -36,8 +36,8 @@
   let focus: [number, number] = $state([-1, 0])
   let searchFieldFocus = $state(true)
   let searchField: HTMLInputElement | null = $state(null)
-  let focusLeft = $state<() => void | undefined>()
-  let focusRight = $state<() => void | undefined>()
+  let focusLeftFns: Record<string, () => void> = {}
+  let focusRightFns: Record<string, () => void> = {}
   let searchResults = $state<HighlightResult<extAPI.CombinedTab>[]>([])
   let groupResults = $state<
     ReturnType<typeof findGroups<HighlightResult<extAPI.CombinedTab>>>
@@ -146,6 +146,10 @@
     })
   })
 
+  onMount(() => {
+    searchField?.focus()
+  })
+
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
@@ -158,11 +162,13 @@
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault()
       searchFieldFocus = false
-      focusLeft?.()
+      focusLeftFns[searchResults[focus[0]].id || '_']?.()
     } else if (e.key === 'ArrowRight') {
       e.preventDefault()
       searchFieldFocus = false
-      focusRight?.()
+      focusRightFns[searchResults[focus[0]].id || '_']?.()
+    } else if (e.key === 'Backspace' && searchString.trim().length > 0) {
+      searchField?.focus()
     } else if (
       e.key.length === 1 &&
       !e.ctrlKey &&
@@ -181,6 +187,9 @@
       if (tabId) {
         extAPI.openTab(tabId)
       }
+    } else {
+      focus[1] = 0
+      focus = focus
     }
   }
 
@@ -256,13 +265,17 @@
         />
       {:else if item.type === 'tabs'}
         <ul id={`group-${item.groupId || ''}`}>
-          {#each item.items as tabInfo}
+          {#each item.items as tabInfo (searchResults[tabInfo.tabIndex].id)}
             <TabItem
               tab={searchResults[tabInfo.tabIndex]}
               nth={tabInfo.focusIndex}
               bind:focus
-              bind:focusLeft
-              bind:focusRight
+              bind:focusLeft={focusLeftFns[
+                searchResults[tabInfo.tabIndex].id || '_'
+              ]}
+              bind:focusRight={focusRightFns[
+                searchResults[tabInfo.tabIndex].id || '_'
+              ]}
               onactionat={handleFocusChange}
               onfocusset={(index) => {
                 if (index === 0) {
@@ -326,4 +339,5 @@
     height: 100%
     flex-grow: 1
     gap: tint.$size-16
+    margin-block: tint.$size-32
 </style>

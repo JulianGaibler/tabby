@@ -1,8 +1,20 @@
 <script lang="ts">
-  import stateStore from '@src/utils/state-store'
   import { _ } from 'svelte-i18n'
   import Button from 'tint/components/Button.svelte'
-  import Toggleable from 'tint/components/Toggleable.svelte'
+
+  function getStoreLink() {
+    const userAgent = navigator.userAgent
+    if (userAgent.includes('Firefox')) {
+      return 'https://addons.mozilla.org/firefox/addon/tabby-fast-tab-switching/'
+    } else if (userAgent.includes('Edg')) {
+      return 'https://microsoftedge.microsoft.com/addons/detail/tabby-fast-tab-switchin/jhdgfjplonmembfjbknipgbaimaelage'
+    } else {
+      return 'https://chrome.google.com/webstore/detail/tabby-fast-tab-switching/jgchkdchcccoibbjnknjakpcbjemapkn'
+    }
+  }
+
+  const SUPPORT_LINK = 'https://jwels.berlin/tabby#support'
+  const STORE_LINK = getStoreLink()
 </script>
 
 <div>
@@ -10,7 +22,9 @@
   <p id="locale-description">{$_('preferences-recommend-explanation')}</p>
 </div>
 <div class="controls end">
-  <Button small>{$_('preferences-recommend-action')}</Button>
+  <Button href={STORE_LINK} external small
+    >{$_('preferences-recommend-action')}</Button
+  >
 </div>
 
 <div>
@@ -18,5 +32,7 @@
   <p id="locale-description">{$_('preferences-support-explanation')}</p>
 </div>
 <div class="controls end">
-  <Button small>{$_('preferences-support-action')}</Button>
+  <Button href={SUPPORT_LINK} external small
+    >{$_('preferences-support-action')}</Button
+  >
 </div>
