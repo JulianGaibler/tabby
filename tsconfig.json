@@ -1,0 +1,17 @@
+{
+  "extends": "@tsconfig/svelte/tsconfig.json",
+  "include": ["src/index.d.ts", "src/**/*.ts", "src/**/*.d.ts"],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"],
+      "tint/*": ["node_modules/tint/dist/*"]
+    }
+  }
+}

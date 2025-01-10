@@ -1,20 +1,18 @@
-# English translation for tabby
-# Fields marked with (catpun) can have a subtle cat-based but if paw-sible. Don't force it though!
+# Brazilian Portuguese translation for tabby
+# Fields marked with (catpun) can have a subtle cat-based pun if paw-sible. Don't force it though!
 
 # This is for the main search input.
 # placeholder: (catpun) Grey text that appears when the input is empty.
 # aria-label: label for screen readers
 search-input:
-  placeholder: Procure suas abas...
-  aria-label: Procure suas abas
+  placeholder: Procurrre suas abas...
+  aria-label: Procurar suas abas
+
+# Label for button with which open tabs are managed
+search-tab-counter: 'Gerenciar {n, plural, =0 {abas} one {a guia aberta} other {{n} guias abertas}}'
 
 # (catpun) Text that appears if there are no search results
 search-no-result: Não encontramos nenhuma aba
-
-# Onboarding text
-onboarding-headline: Obrigado por usar o tabby!
-onboarding-instructions: Digite qualquer coisa na caixa de texto para procurar na janela atual.
-onboarding-about-settings: Além disso, você pode clicar no icone do tabby perto do campo de pesquisa para ver mais opções.
 
 # Navigation buttons
 preferences-button: Preferências
@@ -23,64 +21,77 @@ back-button: Voltar
 # Other buttons
 pin-tab-button: fixar aba
 unpin-tab-button: desafixar aba
-close-tab-button: Fechar aba
+close-tab-button: fechar aba
+mute-tab-button: silenciar aba
+unmute-tab-button: ativar som da aba
+
+# Tab management
+close-duplicate-tabs: Fechar abas duplicadas
+close-older-than:
+  label: Fechar abas mais antigas que...
+  1hour: 1 hora
+  4hours: 4 horas
+  8hours: 8 horas
+  1day: 1 dia
+  1week: 1 semana
+  1month: 1 mês
+sort-tabs-by-title: Ordenar abas por título
+sort-tabs-by-url: Ordenar abas por URL
+sort-tabs-by-last-accessed: Ordenar abas por último acesso
+sort-tabs-by-container: Ordenar abas por contêiner
+group-tabs-by-domain: Agrupar abas por domínio
 
 # Links to source code
-source-code: Código fonte
+source-code: Código-fonte
 
 # (catpun) Headline of preferences-page
 preferences-header: Preferências
 
-
 # Shortcut settings (shortcut is not changeable from within the extension)
-preferences-shortcut-headline: Abrir com atalho de teclado
+preferences-shortcut-headline: Atalho de teclado
 # url will be inserted into message where {0} is.
 # url is a link to an external documentation (see url-changing-shortcuts-*)
 preferences-shortcut-explanation:
-  message: Você pode mudar o atalho {0}.
+  message: 'Você pode mudar o atalho {0}.'
   url: na sua configuração do browser
 
-# Language Settings
-preferences-language-headline: Idiomas
+# Language settings
+preferences-language-headline: Idioma
 # url will be inserted into message where {0} is.
 # url is a link to the git repository
 preferences-language-contribute:
   message: '{0} o tabby em mais idiomas.'
   url: Ajude a traduzir
 
-# Theme Settings
+# Theme settings
 preferences-theme-headline: Tema
-preferences-theme-explanation: "'Auto' usa o tema com base no seu sistema operacional."
+preferences-theme-explanation: "'Automático' usa o tema com base no seu sistema operacional."
 
-# Accent Color Settings
-# preferences-accent-color-headline:
-# preferences-accent-color-explanation:
+# Overview settings
+preferences-show-overview-headline: Mostrar visão geral das abas
+preferences-show-overview-explanation: Exibe todas as abas abertas ao abrir o tabby
 
-# Icon Settings
-preferences-icon-headline: Icone
-preferences-icon-explanation: Escolhe o icone do botão do browser.
+# Tab groups settings
+preferences-show-tab-groups-headline: Mostrar grupos de abas
+preferences-show-tab-groups-explanation: Mostra a qual grupo uma aba pertence
 
-# Improved Accessibility Settings
-# preferences-accessibility-headline:
-# preferences-accessibility-explanation:
-
-# Overview Settings
-# preferences-show-overview-headline:
-# preferences-show-overview-explanation:
+# Container tabs settings
+preferences-show-tab-containers-headline: Mostrar abas de contêiner
+preferences-show-tab-containers-explanation: Mostra a qual contêiner uma aba pertence
 
 # Asking for Recommendation
-preferences-recommend-headline: Gosta do tabby?
-preferences-recommend-review: Compartilhe com seus amigos ou avalie!
-# url will be inserted into message where {0} is.
-# url is a link to a twitter account
-preferences-recommend-feedback:
-  message: 'Você também pode {0}.'
-  url: me dar um feedback no Twitter
+preferences-recommend-headline: Gostou do tabby?
+preferences-recommend-explanation: Compartilhe com seus amigos ou avalie!
+preferences-recommend-action: Avaliar extensão
+
+# Support
+preferences-support-headline: Está com problemas?
+preferences-support-explanation: Se você está enfrentando problemas (incluindo questões de acessibilidade) ou tem sugestões de melhorias
+preferences-support-action: Página de suporte
 
 # Languages
-# Remove all languages except the one being translated and system, so it can fall back to english.
 language-system: Sistema
-language-name-pt_BR: Português (Brasil)
+language-name-pt-BR: Português (Brasil)
 
 # Themes
 theme-system: Automático
@@ -89,25 +100,18 @@ theme-dark: Escuro
 
 # Accent Colors
 accent-color-blue: Azul
-accent-color-purple: Roxa
+accent-color-purple: Roxo
 accent-color-pink: Rosa
 accent-color-red: Vermelho
 accent-color-orange: Laranja
 accent-color-yellow: Amarelo
 accent-color-green: Verde
-accent-color-grey: Cinzento
-
-# Icons
-icon-default: Olho (default)
-icon-eye-themed: Olho (color)
-icon-face: Face
-icon-face-themed: Face (color)
+accent-color-grey: Cinza
 
 # Link to localized documentation on how to change extension shortcuts.
-# Comment out if there is no localized version, so it can fall back to english.
-url-changing-shortcuts-firefox: https://support.mozilla.org/pt-PT/kb/gerir-os-atalhos-de-extensao-no-firefox
-# url-changing-shortcuts-chrome
-
+# Comment out if there is no localized version, so it can fall back to English.
+url-changing-shortcuts-firefox: https://support.mozilla.org/pt-BR/kb/gerencie-atalhos-de-extensoes-no-firefox
+# url-changing-shortcuts-chrome:
 
 # These translations are for the manifest.json file
 manifest:
