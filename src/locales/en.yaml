@@ -115,7 +115,7 @@ accent-color-grey: Gray
 # Link to localized documentation on how to change extension shortcuts.
 # Comment out if there is no localized version, so it can fall back to english.
 url-changing-shortcuts-firefox: https://support.mozilla.org/en-US/kb/manage-extension-shortcuts-firefox
-url-changing-shortcuts-chrome: https://jwels.berlin/chrome-shortcuts/
+url-changing-shortcuts-chrome: https://jwels.berlin/tabby/chrome-shortcut/
 
 # These translations are for the manifest.json file
 manifest:
