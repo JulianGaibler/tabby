@@ -19,7 +19,16 @@
     "48": "tabby_icon_48.png",
     "128": "tabby_icon_128.png"
   },
-  "permissions": ["storage", "tabs", "tabGroups", "contextualIdentities"],
+  "permissions": [
+    "storage",
+    "tabs",
+    "tabGroups",
+    "offscreen",
+    "contextualIdentities"
+  ],
+  "background": {
+    "service_worker": "serviceWorker.js"
+  },
   "action": {
     "default_title": "tabby",
     "default_popup": "index.html",
@@ -42,7 +51,7 @@
     ]
   },
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "description": "__MSG_shortcutOpen__",
       "suggested_key": {
         "default": "Ctrl+Space",

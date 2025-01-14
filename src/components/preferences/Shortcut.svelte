@@ -15,7 +15,12 @@
 <div>
   <h2 class="tint--type-ui-bold">{$_('preferences-shortcut-headline')}</h2>
   <p id="locale-description">
-    <LocalizedWithLink id="preferences-shortcut-explanation" url={IS_FIREFOX ? $_('url-changing-shortcuts-firefox') : $_('url-changing-shortcuts-chrome')} />
+    <LocalizedWithLink
+      id="preferences-shortcut-explanation"
+      url={IS_FIREFOX
+        ? $_('url-changing-shortcuts-firefox')
+        : $_('url-changing-shortcuts-chrome')}
+    />
   </p>
 </div>
 <div class="controls">
