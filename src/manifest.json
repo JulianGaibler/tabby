@@ -27,7 +27,7 @@
     "contextualIdentities"
   ],
   "background": {
-    "service_worker": "serviceWorker.js"
+    "service_worker": "service-worker.js"
   },
   "action": {
     "default_title": "tabby",
