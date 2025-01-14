@@ -41,7 +41,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
-        // background: 'src/scripts/background.ts',
+        offscreen: 'offscreen.html',
+        'service-worker': 'src/scripts/service-worker.ts',
       },
       output: {
         entryFileNames: `[name].js`,
