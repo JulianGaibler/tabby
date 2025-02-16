@@ -13,6 +13,7 @@
   import ShowTabContainers from '@src/components/preferences/ShowTabContainers.svelte'
   import Theme from '@src/components/preferences/Theme.svelte'
   import ShowOverview from '@src/components/preferences/ShowOverview.svelte'
+  import SearchAllWindows from '@src/components/preferences/SearchAllWindows.svelte'
   import GLogo from '@src/assets/g-logo.svg?raw'
   import ShareAndSupport from './components/preferences/ShareAndSupport.svelte'
   const VERSION = __VERSION__
@@ -45,6 +46,7 @@
     <Language />
     <Theme />
     <ShowOverview />
+    <SearchAllWindows />
     {#if hasTabGroupSupport}
       <ShowTabGroups />
     {/if}

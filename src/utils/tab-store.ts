@@ -1,15 +1,23 @@
 import { queryTabs, thisBrowser, type CombinedTab } from './extension-api'
 import { readable } from 'svelte/store'
 
+import stateStore from '@src/utils/state-store'
+
 const tabs = readable([] as CombinedTab[], (set) => {
+  let allWindows = false
+
   const updateTabs = () => {
-    queryTabs({ currentWindow: true }).then((tabs) => {
+    queryTabs({ currentWindow: allWindows ? undefined : true }).then((tabs) => {
       if (!tabs) return
       set(tabs)
     })
   }
 
-  updateTabs()
+  stateStore.getPreference('searchAllWindows').then((pref) => {
+    allWindows = (pref as boolean | undefined) || false
+    updateTabs()
+  })
+
   if (thisBrowser?.tabs) {
     thisBrowser.tabs.onAttached.addListener(updateTabs)
     thisBrowser.tabs.onCreated.addListener(updateTabs)
