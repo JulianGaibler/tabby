@@ -12,6 +12,7 @@ interface Preferences {
   showGroupTabs: boolean
   showContainerTabs: boolean
   locale: 'system' | string
+  searchAllWindows: boolean
 }
 
 interface TabbyState {
@@ -27,6 +28,7 @@ const defaultPreferences: Preferences = {
   showGroupTabs: true,
   showContainerTabs: true,
   locale: 'system',
+  searchAllWindows: false,
 }
 
 const defaultState: TabbyState = {
@@ -81,7 +83,16 @@ function state() {
     // save the preferences
     storageSet(PREFS_KEY, preferences)
   }
-
+  function getPreference(
+    key: keyof Preferences,
+  ): Promise<Preferences[keyof Preferences]> {
+    return new Promise<Preferences[keyof Preferences]>((resolve) => {
+      subscribe((state) => {
+        if (!state.preferences) return
+        resolve(state.preferences[key])
+      })
+    })
+  }
   function startAction() {
     update((state) => ({ ...state, runningAction: true }))
   }
@@ -107,6 +118,7 @@ function state() {
     endAction,
     clearError,
     updateVersion,
+    getPreference,
   }
 }
 
@@ -126,6 +138,7 @@ async function initPreferences() {
       lastVersion: '1.0.0',
       showGroupTabs: true,
       showContainerTabs: true,
+      searchAllWindows: false,
       locale: (await storageGet('language')) || defaultPreferences.locale,
     }
     await thisBrowser?.storage.sync.clear()

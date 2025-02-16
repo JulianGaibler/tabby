@@ -71,6 +71,10 @@ preferences-theme-explanation: "'Auto' selects the theme based on the systems th
 preferences-show-overview-headline: Show tab overview
 preferences-show-overview-explanation: Show all open tabs when you open tabby
 
+# Search all windows settings
+preferences-search-all-windows-headline: Search all windows
+preferences-search-all-windows-explanation: Instead of only searching the current window, search all windows
+
 # Tab groups settings
 preferences-show-tab-groups-headline: Show tab groups
 preferences-show-tab-groups-explanation: Show which tab group a tab is in
