@@ -270,12 +270,12 @@
               tab={searchResults[tabInfo.tabIndex]}
               nth={tabInfo.focusIndex}
               bind:focus
-              bind:focusLeft={focusLeftFns[
-                searchResults[tabInfo.tabIndex].id || '_'
-              ]}
-              bind:focusRight={focusRightFns[
-                searchResults[tabInfo.tabIndex].id || '_'
-              ]}
+              bind:focusLeft={
+                focusLeftFns[searchResults[tabInfo.tabIndex].id || '_']
+              }
+              bind:focusRight={
+                focusRightFns[searchResults[tabInfo.tabIndex].id || '_']
+              }
               onactionat={handleFocusChange}
               onfocusset={(index) => {
                 if (index === 0) {
