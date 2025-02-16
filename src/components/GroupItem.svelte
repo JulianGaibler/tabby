@@ -93,7 +93,7 @@
     gap: tint.$size-4
     position: relative
     &:focus-visible, &.focus
-      outline: 2px solid var(--tint-action)
+      outline: 2px solid var(--tint-action-primary)
       outline-offset: 2px
       @media (forced-colors: active)
         outline-color: CanvasText

@@ -330,8 +330,8 @@
       color: var(--tint-text)
 
   .focus
-    background: var(--tint-action)
-    color: var(--tint-action-text)
+    background: var(--tint-action-primary)
+    color: var(--tint-bg)
     .favicon
       background: #FFF
       @media (prefers-color-scheme: dark)
